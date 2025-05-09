@@ -14,12 +14,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float dashCooldown;
     private float dashCooldownTime;
     private float dashLengthCounter;
+    private SpriteRenderer spriteRenderer;
 
     [SerializeField] private TrailRenderer playerTR;
 
     // Start is called before the first frame update
     void Start()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         activeMoveSpeed = playermoveSpeed;
     }
 
@@ -37,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (dashCooldownTime <= 0 && dashLengthCounter <=0 )
             {
+                spriteRenderer.color = new Color(0, 0, 0, 0.5f);
+                gameObject.tag = "invincible";
                 playerTR.emitting = true;
                 activeMoveSpeed = dashSpeed;
                 dashLengthCounter = dashLength;
@@ -49,9 +53,11 @@ public class PlayerMovement : MonoBehaviour
 
             if (dashLengthCounter <= 0)
             {
+                spriteRenderer.color = new Color(1, 1, 1, 1);
                 activeMoveSpeed = playermoveSpeed;
                 dashCooldownTime = dashCooldown;
                 playerTR.emitting = false;
+                gameObject.tag = "Player";
             }
         }
 
