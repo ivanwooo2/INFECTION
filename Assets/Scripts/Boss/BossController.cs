@@ -28,6 +28,17 @@ public class BossController : MonoBehaviour
 
     [SerializeField] private TMP_Text healthText;
 
+    [SerializeField] private GameObject weakPointPrefab;
+    [SerializeField] private float weakPointDuration = 5f;
+    [SerializeField] private int weakPointDamage = 50;
+    [SerializeField] private float dashCheckDistance = 3f;
+    [SerializeField] private Vector2[] weakPointOffsets;
+
+    private GameObject currentWeakPoint;
+    private bool isWeakPointActive;
+    private Transform playerTransform;
+    private List<Vector3> currentWeakPointPositions = new List<Vector3>();
+
     private GameObject currentBoss;
     private bool isOperating;
     void Start()

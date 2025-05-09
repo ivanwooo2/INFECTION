@@ -176,5 +176,19 @@ MonoBehaviour:
   maxMoveDistance: 10
   explosionRadius: 0.65
   fragmentPrefab: {fileID: 4175512248520869846, guid: f07abe4e137f6ec449ea767088a75e0a, type: 3}
-  fragmentCount: 5
-  fragmentSpeed: 6
+  fragmentCount: 10
+  fragmentSpeed: 3.7
+  attackPhases: 11
+  phaseInterval: 0.3
+  phaseAngles:
+  - 90
+  - 180
+  - 270
+  - 180
+  - 90
+  - 180
+  - 270
+  - 180
+  - 90
+  - 180
+  - 270

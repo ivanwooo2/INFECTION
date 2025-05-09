@@ -18,6 +18,9 @@ public class LinearBomber : MonoBehaviour
     private Vector2 spawnPosition;
     private bool hasExploded = false;
 
+    public int attackPhases = 2;
+    public float phaseInterval = 0.3f;
+    public float[] phaseAngles = { 0f, 90f };
     void Start()
     {
         moveDirection = GetInitialDirection();
@@ -48,42 +51,42 @@ public class LinearBomber : MonoBehaviour
         hasExploded = true;
         GetComponent<SpriteRenderer>().enabled = false;
 
-        SpawnFragments();
+        StartCoroutine(MultiPhaseExplosion());
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
-        foreach (Collider2D hit in hits)
-        {
-            if (hit.CompareTag("Player"))
-            {
-                hit.GetComponent<PlayerHealth>().TakeDamage(1);
-            }
-        }
-
-        Destroy(gameObject, 0.5f);
+        Destroy(gameObject, 3f);
     }
 
-    void SpawnFragments()
+    IEnumerator MultiPhaseExplosion()
     {
+        for (int phase = 0; phase < attackPhases; phase++)
+        {
+            SpawnPhaseFragments(phase);
+            yield return new WaitForSeconds(phaseInterval);
+        }
+    }
+
+    void SpawnPhaseFragments(int phaseIndex)
+    {
+        float baseAngle = phaseAngles[phaseIndex % phaseAngles.Length];
         float angleStep = 360f / fragmentCount;
-        Vector2 explosionPos = transform.position;
 
         for (int i = 0; i < fragmentCount; i++)
         {
-            float angle = i * angleStep;
-            Vector2 dir = new Vector2(
-                Mathf.Cos(angle * Mathf.Deg2Rad),
-                Mathf.Sin(angle * Mathf.Deg2Rad)
-            );
+            float angle = baseAngle + i * angleStep;
+            Vector2 dir = Quaternion.Euler(0, 0, angle) * Vector2.right;
 
             GameObject fragment = Instantiate(
                 fragmentPrefab,
-                explosionPos,
+                transform.position,
                 Quaternion.identity
             );
 
-            fragment.GetComponent<Rigidbody2D>().velocity = dir * fragmentSpeed;
+            Rigidbody2D rb = fragment.GetComponent<Rigidbody2D>();
+            rb.velocity = dir * fragmentSpeed;
         }
     }
+
+
 
     public void InitializeDirection(bool isLeftSide)
     {

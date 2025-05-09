@@ -1493,11 +1493,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 021c8dd170ad016418e84fba60365561, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playermoveSpeed: 5
+  playermoveSpeed: 7
   playerRB: {fileID: 1036304325}
   dashSpeed: 15
-  dashLength: 0.2
-  dashCooldown: 2
+  dashLength: 0.3
+  dashCooldown: 1.6
   playerTR: {fileID: 1036304329}
 --- !u!96 &1036304329
 TrailRenderer:
@@ -2368,10 +2368,15 @@ MonoBehaviour:
   - {fileID: 1688547958}
   - {fileID: 327669163}
   healthCanvas: {fileID: 391094979}
-  maxHealth: 100
+  maxHealth: 1000
   currentHealth: 0
   damage: 2
   healthText: {fileID: 756789245}
+  weakPointPrefab: {fileID: 0}
+  weakPointDuration: 5
+  weakPointDamage: 50
+  dashCheckDistance: 3
+  weakPointOffsets: []
 --- !u!1 &1295637350
 GameObject:
   m_ObjectHideFlags: 0
@@ -3285,15 +3290,15 @@ MonoBehaviour:
   expandCirclePrefab: {fileID: 6658452603097509866, guid: 82ab18cd7f0ed014e884ba37970a7824, type: 3}
   patterns:
   - name: "\u6295\u77F3\u6A5F"
-    cooldown: 2.1
-    weight: 1
+    cooldown: 1.5
+    weight: 2
     isReady: 1
   - name: "\u82E6\u7121"
-    cooldown: 1.7
-    weight: 6
+    cooldown: 2
+    weight: 5
     isReady: 1
   - name: "\u7BAD"
-    cooldown: 0.9
+    cooldown: 0.5
     weight: 3
     isReady: 1
 --- !u!1 &2070962956
