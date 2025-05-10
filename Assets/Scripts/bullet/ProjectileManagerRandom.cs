@@ -8,10 +8,14 @@ public class ProjectileManagerRandom : MonoBehaviour
     public class AttackPattern
     {
         public string name;
-        [Tooltip("冷卻時間(秒)")]
         public float cooldown = 2.1f;
-        [Tooltip("觸發權重比例")]
         public int weight = 1;
+
+        [Header("鎖定彈幕專用參數")]
+        public bool isLockOnAttack = false;
+        public GameObject lockOnLaserPrefab;
+        public Transform[] laserSpawnPoints;
+
         [HideInInspector]
         public bool isReady = true;
     }
@@ -32,6 +36,7 @@ public class ProjectileManagerRandom : MonoBehaviour
 
     IEnumerator AttackScheduler()
     {
+        yield return new WaitForSeconds(2);
         while (true)
         {
             yield return new WaitUntil(() => !isGlobalCooldown);
@@ -87,21 +92,36 @@ public class ProjectileManagerRandom : MonoBehaviour
         pattern.isReady = false;
         Debug.Log($"觸發攻擊: {pattern.name}");
 
-        switch (pattern.name)
+        if (pattern.isLockOnAttack)
         {
-            case "投石機":
-                StartCoroutine(Pattern1Logic());
-                break;
-            case "苦無":
-                StartCoroutine(Pattern2Logic());
-                break;
-            case "箭":
-                StartCoroutine(Pattern3Logic());
-                break;
+            GameObject laserObj = Instantiate(
+                pattern.lockOnLaserPrefab,
+                Vector3.zero,
+                Quaternion.identity
+            );
+            LockOnLaser laserComp = laserObj.GetComponent<LockOnLaser>();
+            laserComp.Initialize(pattern.laserSpawnPoints);
+
+            yield return new WaitUntil(() => laserComp.IsComplete);
+            Destroy(laserObj);
+        }
+        else
+        {
+            switch (pattern.name)
+            {
+                case "投石機":
+                    yield return StartCoroutine(Pattern1Logic());
+                    break;
+                case "苦無":
+                    yield return StartCoroutine(Pattern2Logic());
+                    break;
+                case "箭":
+                    yield return StartCoroutine(Pattern3Logic());
+                    break;
+            }
         }
 
         StartCoroutine(CooldownTimer(pattern));
-
         yield return null;
     }
 

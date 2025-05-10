@@ -1,10 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float playermoveSpeed;
+    [SerializeField] private float playerSkillmoveSpeed;
+    private float originalMoveSpeed;
     [SerializeField] private Rigidbody2D playerRB;
     private Vector2 playerPosition;
 
@@ -16,13 +18,25 @@ public class PlayerMovement : MonoBehaviour
     private float dashLengthCounter;
     private SpriteRenderer spriteRenderer;
 
+    [SerializeField] private float skillDuration = 5f;
+    [SerializeField] private float skillCooldown = 10f;
+    [SerializeField] private float scaleMultiplier = 0.5f;
+    private bool isSkillReady = true;
+    private PlayerHealth playerHealth;
+    private BossController bossController;
+
     [SerializeField] private TrailRenderer playerTR;
+
+    public bool isInvincible = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        originalMoveSpeed = playermoveSpeed;
+        playerHealth = GetComponent<PlayerHealth>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         activeMoveSpeed = playermoveSpeed;
+        bossController = FindObjectOfType<BossController>();
     }
 
     // Update is called once per frame
@@ -39,8 +53,8 @@ public class PlayerMovement : MonoBehaviour
         {
             if (dashCooldownTime <= 0 && dashLengthCounter <=0 )
             {
-                spriteRenderer.color = new Color(0, 0, 0, 0.5f);
-                gameObject.tag = "invincible";
+                spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+                isInvincible = true; 
                 playerTR.emitting = true;
                 activeMoveSpeed = dashSpeed;
                 dashLengthCounter = dashLength;
@@ -57,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
                 activeMoveSpeed = playermoveSpeed;
                 dashCooldownTime = dashCooldown;
                 playerTR.emitting = false;
-                gameObject.tag = "Player";
+                isInvincible = false;
             }
         }
 
@@ -65,5 +79,28 @@ public class PlayerMovement : MonoBehaviour
         {
             dashCooldownTime -= Time.deltaTime;
         }
+
+        if (Input.GetKeyDown(KeyCode.Z) && isSkillReady)
+        {
+            StartCoroutine(ActivateSkill());
+        }
+    }
+
+    IEnumerator ActivateSkill()
+    {
+        isSkillReady = false;
+
+        playerHealth.ToggleSkill(true, scaleMultiplier);
+
+        playermoveSpeed = playerSkillmoveSpeed;
+
+        bossController.ChrSkill1(skillDuration);
+
+        yield return new WaitForSeconds(skillDuration);
+
+        playermoveSpeed = originalMoveSpeed;
+        playerHealth.ToggleSkill(false);
+        yield return new WaitForSeconds(skillCooldown);
+        isSkillReady = true;
     }
 }

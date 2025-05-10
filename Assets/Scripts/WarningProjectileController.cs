@@ -18,12 +18,20 @@ public class WarningProjectileController : MonoBehaviour
     private Rigidbody2D rb;
     private bool isActivated = false;
     [SerializeField] private float downwardRotation;
+    [SerializeField] private float leftwardRotation;
+
+    private GameObject player;
+    private PlayerHealth playerHealth;
+    private PlayerMovement playerMovement;
 
     void Awake()
     {
         warningRenderer = warningIndicator.GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         InitializePosition();
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        playerMovement = player.GetComponent<PlayerMovement>();
     }
 
     void Start()
@@ -62,6 +70,10 @@ public class WarningProjectileController : MonoBehaviour
         {
             rb.transform.rotation = Quaternion.Euler(0, 0, downwardRotation);
         }
+        if (direction == Vector2.left)
+        {
+            rb.transform.rotation = Quaternion.Euler(0, 0, leftwardRotation);
+        }
         rb.velocity = direction * projectileSpeed;
     }
 
@@ -98,7 +110,7 @@ public class WarningProjectileController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (isActivated && other.CompareTag("Player"))
+        if (isActivated && other.CompareTag("Player") && !playerHealth.isInvincible && !playerMovement.isInvincible)
         {
             other.GetComponent<PlayerHealth>().TakeDamage(damage);
             Destroy(gameObject);

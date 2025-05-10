@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: ad8610b1225e45247934483624b02870
-  - enabled: 0
-    path: Assets/Scenes/CharacterSelect.unity
-    guid: 247aa7e80ea0b7344b7cb61cee99691f
+  - enabled: 1
+    path: Assets/Scenes/MainGame.unity
+    guid: 9c776f0f98f6d174cb8094f79e1d858b
+  - enabled: 1
+    path: Assets/Scenes/ResultScene.unity
+    guid: 558d919fe0362f946a434ed0e1a7ebb7
+  - enabled: 1
+    path: Assets/Scenes/GameOverScene.unity
+    guid: 3773cee0d7dad364aac14829c43b7f32
   m_configObjects: {}

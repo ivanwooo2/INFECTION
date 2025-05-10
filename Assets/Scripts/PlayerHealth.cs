@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
@@ -10,22 +11,53 @@ public class PlayerHealth : MonoBehaviour
 
     [SerializeField] private Image healthBackground; 
     [SerializeField] private Image healthFill;
-    [SerializeField] private float invincibleCooldown;
+    [SerializeField] private float invincibleDuration;
     private SpriteRenderer spriteRenderer;
 
-    void Awake()
+    public bool isInvincible = false;
+
+    public bool isSkillActive = false;
+    private float originalScale;
+
+    void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+    void Awake()
+    {
+        originalScale = transform.localScale.x;
         currentHealth = maxHealth;
         UpdateHealthUI();
     }
 
+    public void ToggleSkill(bool state, float scaleMultiplier = 1f)
+    {
+        isSkillActive = state;
+        Vector3 newScale = state ?
+            new Vector3(originalScale * scaleMultiplier, originalScale * scaleMultiplier, 1) :
+            new Vector3(originalScale, originalScale, 1);
+        transform.localScale = newScale;
+    }
+
     public void TakeDamage(int damage)
     {
-        currentHealth = Mathf.Max(currentHealth - damage, 0);
+        if (isInvincible) return;
+
+        StartCoroutine(InvincibleRoutine());
+
+        int finalDamage = isSkillActive ? damage * 2 : damage;
+        currentHealth = Mathf.Max(currentHealth - finalDamage, 0);
         UpdateHealthUI();
-        invincibleCooldown = 2;
         if (currentHealth <= 0) Die();
+    }
+
+    IEnumerator InvincibleRoutine()
+    {
+        isInvincible = true;
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(invincibleDuration);
+        isInvincible = false;
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void UpdateHealthUI()
@@ -40,22 +72,10 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player Died!");
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene("GameOverScene");
     }
-
     void Update()
     {
-        if (invincibleCooldown > 0)
-        {
-            spriteRenderer.color = new Color(1, 1, 1, 0.5f);
-            gameObject.tag = "invincible";
-            invincibleCooldown -= Time.deltaTime;
-        }
 
-        if (invincibleCooldown <= 0)
-        {
-            spriteRenderer.color = new Color(1, 1, 1, 1);
-            gameObject.tag = "Player";
-        }
     }
 }

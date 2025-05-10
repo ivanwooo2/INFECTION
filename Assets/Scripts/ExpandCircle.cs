@@ -16,8 +16,11 @@ public class ExpandCircle : MonoBehaviour
     private Vector3 finalScale;
     private bool isExpanding;
 
+    private Transform player;
+
     void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         finalScale = outerCircle.localScale;
         innerCircle.localScale = Vector3.one * 0.1f;
         StartCoroutine(ExpandInnerCircle());
@@ -49,7 +52,9 @@ public class ExpandCircle : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         projectile.GetComponent<ParabolaProjectile>().Initialize(
             target: transform.position,
-            travelTime: expandDuration
+            travelTime: expandDuration,
+            player.gameObject,
+            player.gameObject
         );
     }
 }

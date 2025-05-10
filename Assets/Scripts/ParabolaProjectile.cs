@@ -10,13 +10,18 @@ public class ParabolaProjectile : MonoBehaviour
     private float duration;
     private float timer;
     private bool canDamage = false;
+    private PlayerHealth playerHealth;
+    private PlayerMovement playerMovement;
+    [SerializeField] private int damage;
 
-    public void Initialize(Vector3 target, float travelTime)
+    public void Initialize(Vector3 target, float travelTime, GameObject playerObj, GameObject playerObj2)
     {
         startPosition = transform.position;
         targetPosition = target;
         duration = travelTime;
         StartCoroutine(EnableDamageOnArrival());
+        playerHealth = playerObj.GetComponent<PlayerHealth>();
+        playerMovement = playerObj.GetComponent<PlayerMovement>();
     }
 
     void Update()
@@ -47,9 +52,9 @@ public class ParabolaProjectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (canDamage && other.CompareTag("Player"))
+        if (canDamage && other.CompareTag("Player") && !playerHealth.isInvincible && !playerMovement.isInvincible)
         {
-            other.GetComponent<PlayerHealth>().TakeDamage(1);
+            other.GetComponent<PlayerHealth>().TakeDamage(damage);
             Destroy(gameObject);
         }
     }

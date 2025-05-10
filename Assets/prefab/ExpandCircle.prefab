@@ -133,9 +133,9 @@ MonoBehaviour:
   outerCircle: {fileID: 6954013339021929685}
   innerCircle: {fileID: 5389287515441009522}
   expandCircle: {fileID: 6658452603097509866}
-  expandDuration: 2
+  expandDuration: 1.5
   projectilePrefab: {fileID: 4425098954770835618, guid: 6415ddf46711c524d866f3d3f67138e3, type: 3}
-  projectileSpeed: 10
+  projectileSpeed: 12
 --- !u!1 &8198172034563996266
 GameObject:
   m_ObjectHideFlags: 0
