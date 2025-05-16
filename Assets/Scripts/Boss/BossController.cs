@@ -27,6 +27,7 @@ public class BossController : MonoBehaviour
     [SerializeField] public float damage;
     private float originalDamage;
     private float doubleDamage;
+    [SerializeField] private float damageMult;
     private float i;
 
     [SerializeField] private TMP_Text healthText;
@@ -43,13 +44,15 @@ public class BossController : MonoBehaviour
     private bool isWeakPointActive;
     private Transform playerTransform;
     private List<Vector3> currentWeakPointPositions = new List<Vector3>();
+    public AudioSource arc;
+    public AudioClip attack1;
 
     private GameObject currentBoss;
     private bool isOperating;
     void Start()
     {
         originalDamage = damage;
-        doubleDamage = damage * 2;
+        doubleDamage = damage * damageMult;
         timeManager = TimeManager.Instance;
         InitializeHealthSystem();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -172,8 +175,11 @@ public class BossController : MonoBehaviour
 
     public void OnBossTriggerEnter(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("invincible"))
+        if (other.CompareTag("Player"))
         {
+            arc.clip = attack1;
+            arc.loop = true;
+            arc.Play();
             isPlayerInDamageArea = true;
             StartCoroutine(ApplyDamage());
         }
@@ -181,8 +187,9 @@ public class BossController : MonoBehaviour
 
     public void OnBossTriggerExit(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("invincible"))
+        if (other.CompareTag("Player"))
         {
+            arc.clip = null;
             isPlayerInDamageArea = false;
         }
     }
@@ -212,8 +219,11 @@ public class BossController : MonoBehaviour
     {
         while (isPlayerInDamageArea && currentHealth < maxHealth)
         {
+            currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
             currentHealth += damage;
             UpdateHealthDisplay();
+            yield return new WaitForSeconds(0.5f);
+            currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
             if (currentHealth >= maxHealth)
             {
                 StartCoroutine(DestroyBoss());

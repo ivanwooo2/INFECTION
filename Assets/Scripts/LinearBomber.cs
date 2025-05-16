@@ -21,6 +21,9 @@ public class LinearBomber : MonoBehaviour
     public int attackPhases = 2;
     public float phaseInterval = 0.3f;
     public float[] phaseAngles = { 0f, 90f };
+
+    public AudioSource kuna;
+    public AudioClip sfx1;
     void Start()
     {
         moveDirection = GetInitialDirection();
@@ -48,6 +51,8 @@ public class LinearBomber : MonoBehaviour
 
     void Explode()
     {
+        kuna.clip = sfx1;
+        kuna.Play();
         hasExploded = true;
         GetComponent<SpriteRenderer>().enabled = false;
 

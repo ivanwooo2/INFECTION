@@ -13,7 +13,17 @@ public class ParabolaProjectile : MonoBehaviour
     private PlayerHealth playerHealth;
     private PlayerMovement playerMovement;
     [SerializeField] private int damage;
+    private GameObject SoundEffect;
+    public AudioSource stone;
+    public AudioClip sfx1;
 
+    void Start()
+    {
+        SoundEffect = GameObject.FindGameObjectWithTag("SoundEffectPlayer");
+        stone = SoundEffect.GetComponent<AudioSource>();
+        stone.clip = sfx1;
+        stone.Play();
+    }
     public void Initialize(Vector3 target, float travelTime, GameObject playerObj, GameObject playerObj2)
     {
         startPosition = transform.position;

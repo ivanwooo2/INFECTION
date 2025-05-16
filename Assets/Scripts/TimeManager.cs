@@ -17,6 +17,7 @@ public class TimeManager : MonoBehaviour
     private PlayerHealth playerHealth;
 
     public float CurrentTime => currentTime;
+    public static float LastRemainingTime { get; private set; }
 
     private void Awake()
     {
@@ -59,6 +60,7 @@ public class TimeManager : MonoBehaviour
     public void LoadResultScene()
     {
         isGameOver = true;
+        LastRemainingTime = currentTime;
         if (playerHealth.currentHealth > 0)
         {
             SceneManager.LoadScene("ResultScene");

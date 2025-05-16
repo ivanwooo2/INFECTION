@@ -100,6 +100,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   height: 5
   damage: 35
+  stone: {fileID: 0}
+  sfx1: {fileID: 8300000, guid: 9263b5886efef97428263ba96caeefb9, type: 3}
 --- !u!58 &8193230941237717756
 CircleCollider2D:
   m_ObjectHideFlags: 0

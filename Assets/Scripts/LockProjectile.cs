@@ -11,7 +11,14 @@ public class LockProjectile : MonoBehaviour
     private PlayerMovement playerMovement;
     [SerializeField] private int damage;
     [SerializeField] private float lifetime;
+    public AudioSource bow1;
+    public AudioClip sfx1;
 
+    void Start()
+    {
+        bow1.clip = sfx1;
+        bow1.Play();
+    }
     public void Initialize(Vector3 dir, GameObject playerObj, GameObject playerObj2)
     {
         Destroy(gameObject, lifetime);

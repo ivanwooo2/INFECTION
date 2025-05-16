@@ -24,6 +24,9 @@ public class WarningProjectileController : MonoBehaviour
     private PlayerHealth playerHealth;
     private PlayerMovement playerMovement;
 
+    public AudioSource bow;
+    public AudioClip sfx1;
+
     void Awake()
     {
         warningRenderer = warningIndicator.GetComponent<SpriteRenderer>();
@@ -66,6 +69,8 @@ public class WarningProjectileController : MonoBehaviour
     void LaunchProjectile()
     {
         Vector2 direction = GetLaunchDirection();
+        bow.clip = sfx1;
+        bow.Play();
         if (direction == Vector2.down)
         {
             rb.transform.rotation = Quaternion.Euler(0, 0, downwardRotation);

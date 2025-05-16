@@ -149,6 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 515d0e3d9b960cb40800575f8fda1c86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingDuration: 3
-  attackDelay: 0.15
+  trackingDuration: 2
+  attackDelay: 0.25
   projectilePrefab: {fileID: 2562398737685814645, guid: 94a5eee8f3659ad4d91a35ef31d96d16, type: 3}
