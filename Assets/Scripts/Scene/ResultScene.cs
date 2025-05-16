@@ -30,4 +30,9 @@ public class ResultScene : MonoBehaviour
         }
         SceneManager.LoadScene("MainGame");
     }
+
+    public void Title()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 }

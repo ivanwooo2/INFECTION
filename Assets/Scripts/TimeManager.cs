@@ -13,6 +13,9 @@ public class TimeManager : MonoBehaviour
     public bool isGameOver = false;
     [SerializeField] private TMP_Text timerText;
 
+    private GameObject player;
+    private PlayerHealth playerHealth;
+
     public float CurrentTime => currentTime;
 
     private void Awake()
@@ -26,7 +29,8 @@ public class TimeManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
         currentTime = totalTime;
     }
 
@@ -55,7 +59,14 @@ public class TimeManager : MonoBehaviour
     public void LoadResultScene()
     {
         isGameOver = true;
-        SceneManager.LoadScene("ResultScene");
+        if (playerHealth.currentHealth > 0)
+        {
+            SceneManager.LoadScene("ResultScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("GameOverScene");
+        }
     }
 
     public void ResetTimer()

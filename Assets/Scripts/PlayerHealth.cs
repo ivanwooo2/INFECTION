@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 500;
-    [SerializeField] private int currentHealth;
+    [SerializeField] public int currentHealth;
 
     [SerializeField] private Image healthBackground; 
     [SerializeField] private Image healthFill;
@@ -19,8 +19,11 @@ public class PlayerHealth : MonoBehaviour
     public bool isSkillActive = false;
     private float originalScale;
 
+    private TimeManager timeManager;
+
     void Start()
     {
+        timeManager = TimeManager.Instance;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
     void Awake()
@@ -72,7 +75,7 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player Died!");
-        SceneManager.LoadScene("GameOverScene");
+        timeManager.LoadResultScene();
     }
     void Update()
     {

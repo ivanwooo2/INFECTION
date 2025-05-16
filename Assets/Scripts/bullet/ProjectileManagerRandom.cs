@@ -16,6 +16,13 @@ public class ProjectileManagerRandom : MonoBehaviour
         public GameObject lockOnLaserPrefab;
         public Transform[] laserSpawnPoints;
 
+        [Header("新彈幕專用參數")]
+        public bool isAdvancedType = false;
+        public GameObject advancedProjectilePrefab;
+        public float phase1Duration = 5f;
+        public float phase2Duration = 1f;
+        public float moveSpeed = 3f;
+
         [HideInInspector]
         public bool isReady = true;
     }
@@ -92,7 +99,23 @@ public class ProjectileManagerRandom : MonoBehaviour
         pattern.isReady = false;
         Debug.Log($"觸發攻擊: {pattern.name}");
 
-        if (pattern.isLockOnAttack)
+        if (pattern.isAdvancedType)
+        {
+            Vector2 spawnPos = GetScreenEdgeSpawnPosition();
+            GameObject projectile = Instantiate(
+                pattern.advancedProjectilePrefab,
+                spawnPos,
+                Quaternion.identity
+            );
+
+            AdvancedPathProjectile ap = projectile.GetComponent<AdvancedPathProjectile>();
+            ap.phase1Duration = pattern.phase1Duration;
+            ap.phase2Duration = pattern.phase2Duration;
+            ap.baseSpeed = pattern.moveSpeed;
+
+            yield return new WaitUntil(() => projectile == null);
+        }
+        else if (pattern.isLockOnAttack)
         {
             GameObject laserObj = Instantiate(
                 pattern.lockOnLaserPrefab,
@@ -176,5 +199,22 @@ public class ProjectileManagerRandom : MonoBehaviour
        );
         yield return new WaitUntil(() => projectile == null);
         yield return new WaitForSeconds(1f);
+    }
+
+    Vector2 GetScreenEdgeSpawnPosition()
+    {
+        Camera cam = Camera.main;
+        int edge = Random.Range(0, 4); // 0:上 1:下 2:左 3:右
+        Vector2 viewportPos = Vector2.zero;
+
+        switch (edge)
+        {
+            case 0: viewportPos = new Vector2(Random.Range(0.1f, 0.9f), 1.1f); break;
+            case 1: viewportPos = new Vector2(Random.Range(0.1f, 0.9f), -0.1f); break;
+            case 2: viewportPos = new Vector2(-0.1f, Random.Range(0.1f, 0.9f)); break;
+            case 3: viewportPos = new Vector2(1.1f, Random.Range(0.1f, 0.9f)); break;
+        }
+
+        return cam.ViewportToWorldPoint(viewportPos);
     }
 }

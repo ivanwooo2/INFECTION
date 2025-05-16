@@ -24,7 +24,7 @@ public class MainMenuController : MonoBehaviour
     }
     public void Play()
     {
-        SceneManager.LoadScene("CharacterSelect");
+        SceneManager.LoadScene("MainGame");
     }
 
     public void Setting()
