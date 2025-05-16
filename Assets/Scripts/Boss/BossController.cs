@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class BossController : MonoBehaviour
 {
+    [SerializeField] private GameObject projectileManager;
+    private TimeManager TimeManager;
     [SerializeField] public GameObject BossPreFab;
     [SerializeField] public float minInterval;
     [SerializeField] public float maxInterval;
@@ -51,6 +53,7 @@ public class BossController : MonoBehaviour
     private bool isOperating;
     void Start()
     {
+        TimeManager = GetComponent<TimeManager>();
         originalDamage = damage;
         doubleDamage = damage * damageMult;
         timeManager = TimeManager.Instance;
@@ -208,9 +211,29 @@ public class BossController : MonoBehaviour
 
     IEnumerator DestroyBoss()
     {
-        //Destroy(currentBoss);
-        //healthCanvas.gameObject.SetActive(false);
-        //isOperating = false;
+        timeManager.isGameOver = true;
+        Destroy(projectileManager);
+        StopCoroutine(RandomSpawnLoop());
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.9f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.8f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.7f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.6f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.2f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.1f);
+        yield return new WaitForSeconds(0.3f);
+        currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
+        yield return new WaitForSeconds(2.3f);
         timeManager.LoadResultScene();
         yield return null;
     }
@@ -222,14 +245,14 @@ public class BossController : MonoBehaviour
             currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
             currentHealth += damage;
             UpdateHealthDisplay();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
             currentBoss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
             if (currentHealth >= maxHealth)
             {
                 StartCoroutine(DestroyBoss());
             }
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
         }
     }
 

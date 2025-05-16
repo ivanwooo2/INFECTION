@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
         playerRB.velocity = playerPosition * activeMoveSpeed;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (dashCooldownTime <= 0 && dashLengthCounter <=0 )
             {
@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
             dashCooldownTime -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Z) && isSkillReady)
+        if (Input.GetKeyDown(KeyCode.Q) && isSkillReady)
         {
             StartCoroutine(ActivateSkill());
         }

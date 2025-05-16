@@ -58,7 +58,20 @@ public class PlayerHealth : MonoBehaviour
     {
         isInvincible = true;
         GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
-        yield return new WaitForSeconds(invincibleDuration);
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        yield return new WaitForSeconds(invincibleDuration / 7);
+        GetComponent<SpriteRenderer>().color = Color.white;
         isInvincible = false;
         GetComponent<SpriteRenderer>().color = Color.white;
     }
