@@ -6,11 +6,11 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float playermoveSpeed;
     [SerializeField] private float playerSkillmoveSpeed;
-    private float originalMoveSpeed;
+    [SerializeField] private float originalMoveSpeed;
     [SerializeField] private Rigidbody2D playerRB;
     private Vector2 playerPosition;
 
-    private float activeMoveSpeed;
+    [SerializeField] private float activeMoveSpeed;
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashLength;
     [SerializeField] private float dashCooldown;
@@ -22,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float skillCooldown = 10f;
     [SerializeField] private float scaleMultiplier = 0.5f;
     private bool isSkillReady = true;
+    private bool isSkilling;
     private PlayerHealth playerHealth;
     private BossController bossController;
 
@@ -49,15 +50,16 @@ public class PlayerMovement : MonoBehaviour
 
         playerRB.velocity = playerPosition * activeMoveSpeed;
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             if (dashCooldownTime <= 0 && dashLengthCounter <=0 )
             {
                 spriteRenderer.color = new Color(1, 1, 1, 0.5f);
                 isInvincible = true; 
                 playerTR.emitting = true;
-                activeMoveSpeed = dashSpeed;
                 dashLengthCounter = dashLength;
+                activeMoveSpeed = dashSpeed;
+
             }
         }
 
@@ -67,11 +69,18 @@ public class PlayerMovement : MonoBehaviour
 
             if (dashLengthCounter <= 0)
             {
-                spriteRenderer.color = new Color(1, 1, 1, 1);
-                activeMoveSpeed = playermoveSpeed;
+                spriteRenderer.color = new Color(1, 1, 1, 1);;
                 dashCooldownTime = dashCooldown;
                 playerTR.emitting = false;
                 isInvincible = false;
+                if (!isSkilling)
+                {
+                    activeMoveSpeed = originalMoveSpeed;
+                }
+                else
+                {
+                    activeMoveSpeed = playerSkillmoveSpeed;
+                }
             }
         }
 
@@ -89,16 +98,16 @@ public class PlayerMovement : MonoBehaviour
     IEnumerator ActivateSkill()
     {
         isSkillReady = false;
-
+        isSkilling = true;
         playerHealth.ToggleSkill(true, scaleMultiplier);
 
-        playermoveSpeed = playerSkillmoveSpeed;
+        activeMoveSpeed = playerSkillmoveSpeed;
 
         bossController.ChrSkill1(skillDuration);
 
         yield return new WaitForSeconds(skillDuration);
-
-        playermoveSpeed = originalMoveSpeed;
+        isSkilling = false;
+        activeMoveSpeed = originalMoveSpeed;
         playerHealth.ToggleSkill(false);
         yield return new WaitForSeconds(skillCooldown);
         isSkillReady = true;

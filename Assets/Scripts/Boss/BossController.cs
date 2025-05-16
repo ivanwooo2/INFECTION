@@ -362,7 +362,7 @@ public class BossController : MonoBehaviour
         float percentage = (currentHealth * 100 / maxHealth);
         healthText.SetText($"{Mathf.RoundToInt(percentage)} %");
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             TryAttackWeakPoint();
         }
