@@ -3713,6 +3713,15 @@ MonoBehaviour:
   healthFill: {fileID: 1679490213}
   invincibleDuration: 0.25
   PlayerDamageBackGround: {fileID: 529705818}
+  playerDamageEffect: {fileID: 5613851852929123373, guid: 775aeba5623aa6d418f95dd8d88b2dd3, type: 3}
+  projectileManager: {fileID: 2090056209}
+  transition: {fileID: 57836446}
+  transitionTime: 1
+  PlayerDestroyEffect: {fileID: 1481550198545971830, guid: 7cfcd383fe9b55c418fd56a420c6515f, type: 3}
+  randomX: 0
+  randomY: 0
+  arc: {fileID: 1443496796}
+  DestroySE: {fileID: 8300000, guid: d5190c6656d89b4448bf8a16707811c0, type: 3}
   isInvincible: 0
   isSkillActive: 0
   Player: {fileID: 1443496796}
@@ -4816,8 +4825,9 @@ MonoBehaviour:
   - {x: -3.5, y: 3.5}
   - {x: 3.5, y: -3.5}
   arc: {fileID: 1589228447}
+  arc2: {fileID: 0}
   attack1: {fileID: 8300000, guid: 038fda32d7b497e4586a789fc71f5871, type: 3}
-  attack2: {fileID: 8300000, guid: 648986f2205d40045b97f9f00e0d51a7, type: 3}
+  attack2: {fileID: 8300000, guid: 189a9a812fe06fc4ea282a19cfe4a337, type: 3}
   DestroySE: {fileID: 8300000, guid: d5190c6656d89b4448bf8a16707811c0, type: 3}
   Crossfade: {fileID: 57836445}
   transition: {fileID: 0}

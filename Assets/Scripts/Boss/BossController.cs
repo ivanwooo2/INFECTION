@@ -57,7 +57,7 @@ public class BossController : MonoBehaviour
     private bool isWeakPointActive;
     private Transform playerTransform;
     //private List<Vector3> currentWeakPointPositions = new List<Vector3>();
-    public AudioSource arc;
+    public AudioSource arc,arc2;
     public AudioClip attack1,attack2,DestroySE;
 
     private GameObject currentBoss;
@@ -456,8 +456,10 @@ public class BossController : MonoBehaviour
 
             if (distance <= dashCheckDistance)
             {
-                arc.clip = attack2;
-                arc.Play();
+                arc2.clip = attack2;
+                arc2.Play();
+                GameObject WeakPointEffect = Instantiate(BossDestroyPrefab);
+                WeakPointEffect.transform.position = currentWeakPoint.transform.position;
                 DealWeakPointDamage();
                 Destroy(currentWeakPoint);
                 isWeakPointActive = false;

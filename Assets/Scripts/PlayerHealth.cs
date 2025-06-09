@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,7 +14,17 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private Image healthFill;
     [SerializeField] private float invincibleDuration;
     [SerializeField] private GameObject PlayerDamageBackGround;
+    [SerializeField] private GameObject playerDamageEffect;
+    [SerializeField] private GameObject projectileManager;
+    [SerializeField] Animator transition;
+    [SerializeField] float transitionTime = 1f;
+    [SerializeField] GameObject PlayerDestroyEffect;
+    [SerializeField] private float randomX;
+    [SerializeField] private float randomY;
+    private float randomRotateZ;
     private SpriteRenderer spriteRenderer;
+    public AudioSource arc;
+    public AudioClip DestroySE;
 
     public bool isInvincible = false;
 
@@ -49,6 +60,8 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (isInvincible) return;
+        GameObject DamageEffect = Instantiate(playerDamageEffect,transform);
+        DamageEffect.transform.rotation = Quaternion.Euler(0, 0, randomRotateZ);
         Player.clip = Damaged;
         Player.Play();
         StartCoroutine(InvincibleRoutine());
@@ -81,11 +94,98 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
+
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.enabled = false;
+        }
+
         Debug.Log("Player Died!");
+        StartCoroutine(PlayerDie());
+    }
+
+    IEnumerator PlayerDie()
+    {
+        timeManager.isGameOver = true;
+        isInvincible = true;
+        if (projectileManager != null)
+        {
+            var manager = projectileManager.GetComponent<ProjectileManagerRandom>();
+            if (manager != null)
+            {
+                manager.CleanupProjectiles();
+            }
+        }
+        Collider2D coli = GetComponent<CircleCollider2D>();
+        coli.enabled = false;
+        Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
+        rigidbody2D.velocity = Vector2.zero;
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.9f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        GameObject PlayerDestroy = Instantiate(PlayerDestroyEffect,transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x+randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.8f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.7f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.6f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.4f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0); gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.2f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.1f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        PlayerDestroy = Instantiate(PlayerDestroyEffect, transform);
+        PlayerDestroy.transform.position = new Vector3(transform.position.x + randomX, transform.position.y + randomY, 0);
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
+        arc.clip = DestroySE;
+        arc.Play();
+        yield return new WaitForSeconds(0.3f);
+        transition.SetBool("Start", true);
+        yield return new WaitForSeconds(transitionTime);
         timeManager.LoadResultScene();
     }
     void Update()
     {
-
+        randomX = Random.Range(-0.5f, 0.5f);
+        randomY = Random.Range(-0.5f, 0.5f);
+        randomRotateZ = Random.Range(-360, 360);
     }
 }

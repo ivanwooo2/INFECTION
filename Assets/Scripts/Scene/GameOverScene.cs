@@ -6,7 +6,13 @@ using UnityEngine.SceneManagement;
 
 public class GameOverScene : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] private bool isReturn;
+
+    [SerializeField] Animator transition;
+    [SerializeField] float transitionTime = 1f;
+
+    [SerializeField] private AudioSource AudioSource;
+    [SerializeField] private AudioClip confiem, back;
     void Start()
     {
         Cursor.lockState = CursorLockMode.None;
@@ -17,24 +23,40 @@ public class GameOverScene : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void Restart()
+    public void RestartGame()
     {
+        AudioSource.clip = confiem;
+        AudioSource.Play();
         if (TimeManager.Instance != null)
         {
+            Destroy(TimeManager.Instance.gameObject);
             TimeManager.Instance.ResetTimer();
         }
-        int lastLevel = PlayerPrefs.GetInt("LastLevel");
-        SceneManager.LoadScene(lastLevel);
+        isReturn = false;
+        StartCoroutine(SceneMove());
     }
 
-    public void MainMenu()
+    public void Title()
     {
-        SceneManager.LoadScene("MainMenu");
+        AudioSource.clip = back;
+        AudioSource.Play();
+        isReturn = true;
+        StartCoroutine(SceneMove());
+    }
+
+    IEnumerator SceneMove()
+    {
+        transition.SetBool("Start", true);
+        yield return new WaitForSeconds(transitionTime);
+        if (isReturn == true)
+        {
+            SceneManager.LoadScene("MainMenu");
+        }
+        else if (isReturn == false)
+        {
+            int lastLevel = PlayerPrefs.GetInt("LastLevel");
+            SceneManager.LoadScene(lastLevel);
+        }
     }
 }

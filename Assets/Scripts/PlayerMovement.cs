@@ -61,6 +61,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+
+        if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+        {
+            playerRB.velocity = Vector2.zero;
+            return;
+        }
+
         UpdateCooldownUI();
         playerPosition.x = Input.GetAxisRaw("Horizontal");
         playerPosition.y = Input.GetAxisRaw("Vertical");
@@ -71,6 +78,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Dash"))
         {
+            if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+            {
+                playerRB.velocity = Vector2.zero;
+                return;
+            }
             if (dashCooldownTime <= 0 && dashLengthCounter <=0 )
             {
                 Player.clip = dash;
@@ -89,11 +101,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Slow"))
         {
+            if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+            {
+                playerRB.velocity = Vector2.zero;
+                return;
+            }
             activeMoveSpeed = SlowMoveSpeed;
         }
 
         if (dashLengthCounter > 0)
         {
+            if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+            {
+                playerRB.velocity = Vector2.zero;
+                return;
+            }
             dashLengthCounter -= Time.deltaTime;
 
             if (dashLengthCounter <= 0)
@@ -123,6 +145,11 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Q) && isSkillReady || Input.GetButtonDown("Skill") && isSkillReady)
         {
+            if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+            {
+                playerRB.velocity = Vector2.zero;
+                return;
+            }
             Player.clip = skill1;
             Player.Play();
             StartCoroutine(ActivateSkill());
