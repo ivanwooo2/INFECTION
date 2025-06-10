@@ -96,6 +96,11 @@ public class LevelSelevtion : MonoBehaviour
     {
         if (isLevelSelected && selectedIndex >= 0)
         {
+            SelectionSceneBGMManager BGMmanager = FindObjectOfType<SelectionSceneBGMManager>();
+            if (BGMmanager != null)
+            {
+                Destroy(BGMmanager.gameObject);
+            }
             AudioSource.clip = confiem;
             AudioSource.Play();
             selectedIndex = PlayerPrefs.GetInt("SelectedLevelIndex");
