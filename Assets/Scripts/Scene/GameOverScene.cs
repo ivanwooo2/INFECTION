@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class GameOverScene : MonoBehaviour
 {
+    private MenuNavigationSystem navigationSystem;
+
     [SerializeField] private bool isReturn;
 
     [SerializeField] Animator transition;
@@ -21,6 +23,7 @@ public class GameOverScene : MonoBehaviour
         {
             Destroy(TimeManager.Instance.gameObject);
         }
+        navigationSystem = gameObject.AddComponent<MenuNavigationSystem>();
     }
 
 
@@ -57,6 +60,18 @@ public class GameOverScene : MonoBehaviour
         {
             int lastLevel = PlayerPrefs.GetInt("LastLevel");
             SceneManager.LoadScene(lastLevel);
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            RestartGame();
+        }
+        else if (Input.GetButtonDown("Cancel"))
+        {
+            Title();
         }
     }
 }

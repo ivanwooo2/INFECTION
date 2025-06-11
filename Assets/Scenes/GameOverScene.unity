@@ -923,6 +923,7 @@ GameObject:
   - component: {fileID: 1318892396}
   - component: {fileID: 1318892395}
   - component: {fileID: 1318892394}
+  - component: {fileID: 1318892397}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -1044,6 +1045,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318892392}
   m_CullTransparentMesh: 1
+--- !u!114 &1318892397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318892392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1475090822
 GameObject:
   m_ObjectHideFlags: 0
@@ -1056,6 +1069,7 @@ GameObject:
   - component: {fileID: 1475090826}
   - component: {fileID: 1475090825}
   - component: {fileID: 1475090824}
+  - component: {fileID: 1475090827}
   m_Layer: 5
   m_Name: RestartButton
   m_TagString: Untagged
@@ -1177,6 +1191,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1475090822}
   m_CullTransparentMesh: 1
+--- !u!114 &1475090827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1475090822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1605649262
 GameObject:
   m_ObjectHideFlags: 0

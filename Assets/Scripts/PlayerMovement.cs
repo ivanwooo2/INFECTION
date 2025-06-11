@@ -109,6 +109,16 @@ public class PlayerMovement : MonoBehaviour
             activeMoveSpeed = SlowMoveSpeed;
         }
 
+        if (Input.GetButtonUp("Slow"))
+        {
+            if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+            {
+                playerRB.velocity = Vector2.zero;
+                return;
+            }
+            activeMoveSpeed = originalMoveSpeed;
+        }
+
         if (dashLengthCounter > 0)
         {
             if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)

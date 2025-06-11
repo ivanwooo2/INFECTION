@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 public class CharacterSelectionManager : MonoBehaviour
 {
+    private MenuNavigationSystem navigationSystem;
+
     [SerializeField] private bool isReturn;
     [SerializeField] Animator transition;
     [SerializeField] float transitionTime = 1f;
@@ -37,6 +39,14 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             nextStageButton.interactable = false;
         }
+        foreach (Button bgButton in characterBackGround)
+        {
+            if (bgButton != null && bgButton.GetComponent<IgnoreNavigation>() == null)
+            {
+                bgButton.gameObject.AddComponent<IgnoreNavigation>();
+            }
+        }
+        navigationSystem = gameObject.AddComponent<MenuNavigationSystem>();
     }
 
     private void InitializeButtons()
@@ -138,6 +148,18 @@ public class CharacterSelectionManager : MonoBehaviour
         else if (isReturn == false)
         {
             SceneManager.LoadScene("LevelSelectScene");
+        }
+    }
+
+    void Update()
+    {
+        if(Input.GetButtonDown("Submit"))
+        {
+            NextStageScene();
+        }
+        else if(Input.GetButtonDown("Cancel"))
+        {
+            TitleScene();
         }
     }
 }

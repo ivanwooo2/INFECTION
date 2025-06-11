@@ -7,6 +7,8 @@ using TMPro;
 
 public class ResultScene : MonoBehaviour
 {
+    private MenuNavigationSystem navigationSystem;
+
     [SerializeField] private bool isReturn;
     [SerializeField] private TMP_Text resultTimeText;
 
@@ -30,6 +32,7 @@ public class ResultScene : MonoBehaviour
 
             Destroy(TimeManager.Instance.gameObject);
         }
+        navigationSystem = gameObject.AddComponent<MenuNavigationSystem>();
     }
 
     public void RestartGame()
@@ -65,6 +68,18 @@ public class ResultScene : MonoBehaviour
         {
             int lastLevel = PlayerPrefs.GetInt("LastLevel");
             SceneManager.LoadScene(lastLevel);
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            RestartGame();
+        }
+        else if (Input.GetButtonDown("Cancel"))
+        {
+            Title();
         }
     }
 }

@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class DiffcultySelection : MonoBehaviour
 {
+    private MenuNavigationSystem navigationSystem;
+
     [SerializeField] private bool isReturn;
     [SerializeField] Animator transition;
     [SerializeField] float transitionTime = 1f;
@@ -34,6 +36,14 @@ public class DiffcultySelection : MonoBehaviour
         {
             nextSceneButton.interactable = false;
         }
+        foreach (Button bgButton in diffcultBackGround)
+        {
+            if (bgButton != null && bgButton.GetComponent<IgnoreNavigation>() == null)
+            {
+                bgButton.gameObject.AddComponent<IgnoreNavigation>();
+            }
+        }
+        navigationSystem = gameObject.AddComponent<MenuNavigationSystem>();
     }
 
     private void InitializeButtons()
@@ -104,6 +114,11 @@ public class DiffcultySelection : MonoBehaviour
     {
         AudioSource.clip = back;
         AudioSource.Play();
+        SelectionSceneBGMManager BGMmanager = FindObjectOfType<SelectionSceneBGMManager>();
+        if (BGMmanager != null)
+        {
+            Destroy(BGMmanager.gameObject);
+        }
         isReturn = true;
         StartCoroutine(Scenemove());
     }
@@ -119,6 +134,18 @@ public class DiffcultySelection : MonoBehaviour
         else if (isReturn == false)
         {
             SceneManager.LoadScene("CharacterSelectScene");
+        }
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            NextStageScene();
+        }
+        else if (Input.GetButtonDown("Cancel"))
+        {
+            TitleScene();
         }
     }
 }

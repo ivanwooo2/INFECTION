@@ -563,7 +563,7 @@ MonoBehaviour:
   - {fileID: 9143796980853102976}
   - {fileID: 3326827576693365479}
   flashInterval: 0.3
-  flashCount: 5
+  flashCount: 4
   redInterval: 0
   flashColor: {r: 1, g: 1, b: 1, a: 1}
   projectileSpacing: 1

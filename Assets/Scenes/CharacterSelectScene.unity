@@ -329,6 +329,7 @@ GameObject:
   - component: {fileID: 132336971}
   - component: {fileID: 132336970}
   - component: {fileID: 132336969}
+  - component: {fileID: 132336972}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -450,6 +451,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132336967}
   m_CullTransparentMesh: 1
+--- !u!114 &132336972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132336967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &181708074
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +773,7 @@ GameObject:
   - component: {fileID: 390610885}
   - component: {fileID: 390610884}
   - component: {fileID: 390610886}
+  - component: {fileID: 390610889}
   m_Layer: 5
   m_Name: Character4ButtonBackGround
   m_TagString: Untagged
@@ -885,6 +899,18 @@ RectTransform:
   m_AnchoredPosition: {x: -2, y: -0.6000061}
   m_SizeDelta: {x: -8, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &390610889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390610883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &404228287
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,6 +923,7 @@ GameObject:
   - component: {fileID: 404228291}
   - component: {fileID: 404228290}
   - component: {fileID: 404228289}
+  - component: {fileID: 404228292}
   m_Layer: 5
   m_Name: NextButton
   m_TagString: Untagged
@@ -1017,6 +1044,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 404228287}
   m_CullTransparentMesh: 1
+--- !u!114 &404228292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 404228287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &444454435
 GameObject:
   m_ObjectHideFlags: 0
@@ -2164,6 +2203,7 @@ GameObject:
   - component: {fileID: 1877474645}
   - component: {fileID: 1877474643}
   - component: {fileID: 1877474642}
+  - component: {fileID: 1877474647}
   m_Layer: 5
   m_Name: Character1ButtonBackGround
   m_TagString: Untagged
@@ -2272,6 +2312,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0.89990234, y: -0.6000061}
   m_SizeDelta: {x: 0, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1877474647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877474641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1906222182
 GameObject:
   m_ObjectHideFlags: 0
@@ -2632,6 +2684,7 @@ GameObject:
   - component: {fileID: 1996880711}
   - component: {fileID: 1996880710}
   - component: {fileID: 1996880712}
+  - component: {fileID: 1996880715}
   m_Layer: 5
   m_Name: Character2ButtonBackGround
   m_TagString: Untagged
@@ -2757,6 +2810,18 @@ RectTransform:
   m_AnchoredPosition: {x: -2.5, y: -0.6000061}
   m_SizeDelta: {x: 1, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1996880715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996880709}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2008301244
 GameObject:
   m_ObjectHideFlags: 0
@@ -2920,6 +2985,7 @@ GameObject:
   - component: {fileID: 2094528422}
   - component: {fileID: 2094528421}
   - component: {fileID: 2094528423}
+  - component: {fileID: 2094528426}
   m_Layer: 5
   m_Name: Character3ButtonBackGround
   m_TagString: Untagged
@@ -3045,6 +3111,18 @@ RectTransform:
   m_AnchoredPosition: {x: -0.5, y: -0.6000061}
   m_SizeDelta: {x: 1, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2094528426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2094528420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ad76d77f3ec5094faa551d97ce17c66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

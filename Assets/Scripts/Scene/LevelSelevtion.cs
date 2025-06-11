@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class LevelSelevtion : MonoBehaviour
 {
+    private MenuNavigationSystem navigationSystem;
+
     [SerializeField] private bool isReturn;
     [SerializeField] Animator transition;
     [SerializeField] float transitionTime = 1f;
@@ -34,6 +36,14 @@ public class LevelSelevtion : MonoBehaviour
         {
             nextStageButton.interactable = false;
         }
+        foreach (Button bgButton in levelBackGround)
+        {
+            if (bgButton != null && bgButton.GetComponent<IgnoreNavigation>() == null)
+            {
+                bgButton.gameObject.AddComponent<IgnoreNavigation>();
+            }
+        }
+        navigationSystem = gameObject.AddComponent<MenuNavigationSystem>();
     }
 
     private void InitializeButtons()
@@ -142,5 +152,17 @@ public class LevelSelevtion : MonoBehaviour
         transition.SetBool("Start", true);
         yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene("Stage1hard");
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            NextStageScene();
+        }
+        else if (Input.GetButtonDown("Cancel"))
+        {
+            CharacterScene();
+        }
     }
 }

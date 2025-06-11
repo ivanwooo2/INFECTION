@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
+    private MenuNavigationSystem navigationSystem;
+
     private int selectedIndex;
     [SerializeField] GameObject mainmenu;
 
@@ -26,6 +28,7 @@ public class MainMenuController : MonoBehaviour
         transition.SetBool("Start", false);
         transition = FindAnyObjectByType<Animator>();
         Cursor.lockState = CursorLockMode.None;
+        navigationSystem = gameObject.AddComponent<MenuNavigationSystem>();
     }
 
     void LoadSetting()
@@ -80,5 +83,13 @@ public class MainMenuController : MonoBehaviour
     {
         Screen.fullScreen = isFull;
         PlayerPrefs.SetInt("Fullscreen", isFull ? 1 : 0);
+    }
+
+    void Update()
+    {
+        if (Input.GetButtonDown("Submit"))
+        {
+            PlayButton();
+        }
     }
 }
