@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
 {
     [SerializeField] private int maxHealth = 500;
     [SerializeField] public int currentHealth;
+    [SerializeField] private bool hasPersisted = false;
 
     [SerializeField] private Image healthBackground; 
     [SerializeField] private Image healthFill;
@@ -60,6 +61,7 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (isInvincible) return;
+
         GameObject DamageEffect = Instantiate(playerDamageEffect,transform);
         DamageEffect.transform.rotation = Quaternion.Euler(0, 0, randomRotateZ);
         Player.clip = Damaged;
@@ -67,6 +69,12 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(InvincibleRoutine());
 
         int finalDamage = isSkillActive ? damage * 2 : damage;
+        if (!hasPersisted && currentHealth - finalDamage <= 0)
+        {
+            currentHealth = 1;
+            hasPersisted = true;
+            return;
+        }
         currentHealth = Mathf.Max(currentHealth - finalDamage, 0);
         UpdateHealthUI();
         if (currentHealth <= 0) Die();

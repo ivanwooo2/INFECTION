@@ -32,8 +32,10 @@ public class CharacterSelectionManager : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1;
         transition = FindAnyObjectByType<Animator>();
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         InitializeButtons();
         if (nextStageButton != null)
         {

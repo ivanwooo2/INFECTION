@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8467813011098645052}
   - component: {fileID: 2152632309998164078}
   - component: {fileID: -1985347593252090495}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SwordNormal
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d8f5658712c774f9104e3b1a0fe50a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 6
+  damage: 10
 --- !u!96 &-1985347593252090495
 TrailRenderer:
   serializedVersion: 3

@@ -6,7 +6,6 @@ public class LockProjectile : MonoBehaviour
 {
     public float speed = 15f;
     private Vector3 direction;
-    private GameObject player;
     private PlayerHealth playerHealth;
     private PlayerMovement playerMovement;
     [SerializeField] private int damage;

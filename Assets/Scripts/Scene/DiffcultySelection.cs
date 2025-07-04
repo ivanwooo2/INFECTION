@@ -27,8 +27,11 @@ public class DiffcultySelection : MonoBehaviour
     public Button[] diffcultBackGround;
     public Button nextSceneButton;
 
+    private TutorialCheckManager tutorialCheckManager;
+
     void Start()
     {
+        tutorialCheckManager = FindObjectOfType<TutorialCheckManager>();
         transition = FindAnyObjectByType<Animator>();
         Cursor.lockState = CursorLockMode.None;
         InitializeButtons();
@@ -114,11 +117,6 @@ public class DiffcultySelection : MonoBehaviour
     {
         AudioSource.clip = back;
         AudioSource.Play();
-        SelectionSceneBGMManager BGMmanager = FindObjectOfType<SelectionSceneBGMManager>();
-        if (BGMmanager != null)
-        {
-            Destroy(BGMmanager.gameObject);
-        }
         isReturn = true;
         StartCoroutine(Scenemove());
     }
@@ -127,7 +125,16 @@ public class DiffcultySelection : MonoBehaviour
     {
         transition.SetBool("Start", true);
         yield return new WaitForSeconds(transitionTime);
-        if (isReturn == true)
+        if (tutorialCheckManager.TutorialDone == false && selectedIndex == 0)
+        {
+            SceneManager.LoadScene("tutorial");
+            SelectionSceneBGMManager BGMmanager = FindObjectOfType<SelectionSceneBGMManager>();
+            if (BGMmanager != null)
+            {
+                Destroy(BGMmanager.gameObject);
+            }
+        }
+        else if (isReturn == true)
         {
             SceneManager.LoadScene("MainMenu");
         }

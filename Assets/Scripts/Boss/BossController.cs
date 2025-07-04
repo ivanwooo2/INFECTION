@@ -11,7 +11,6 @@ public class BossController : MonoBehaviour
 
     [SerializeField] private GameObject playerDamageEffect;
 
-    private GameObject EffectClone;
     private TimeManager TimeManager;
     [SerializeField] public GameObject BossPreFab;
     private Animator BossAnimator;
@@ -56,7 +55,6 @@ public class BossController : MonoBehaviour
     private GameObject currentWeakPoint;
     private bool isWeakPointActive;
     private Transform playerTransform;
-    //private List<Vector3> currentWeakPointPositions = new List<Vector3>();
     public AudioSource arc,arc2;
     public AudioClip attack1,attack2,DestroySE;
 
@@ -72,6 +70,10 @@ public class BossController : MonoBehaviour
     [SerializeField] GameObject BossDestroyPrefab;
     [SerializeField] int randomx;
     [SerializeField] int randomy;
+    [SerializeField] float EffectrandomZ;
+    private bool isPhase2 = false;
+    private bool phase2Triggered = false;
+    public bool IsBossDead { get; private set; } = false;
     void Start()
     {
         transition = Crossfade.GetComponent<Animator>();
@@ -227,7 +229,6 @@ public class BossController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            EffectClone = Instantiate(playerDamageEffect);
             BossAnimator.SetBool("isHitting", true);
             isPlayerInDamageArea = true;
             StartCoroutine(ApplyDamage());
@@ -238,7 +239,6 @@ public class BossController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Destroy(EffectClone);
             BossAnimator.SetBool("isHitting", false);
             isPlayerInDamageArea = false;
         }
@@ -258,6 +258,7 @@ public class BossController : MonoBehaviour
 
     IEnumerator DestroyBoss()
     {
+        IsBossDead = true;
         timeManager.isGameOver = true;
         playerHealth.isInvincible = true;
         if (projectileManager != null)
@@ -358,7 +359,8 @@ public class BossController : MonoBehaviour
             {
                 arc.clip = attack1;
                 arc.Play();
-                EffectClone.transform.position = currentBoss.transform.position;
+                GameObject EffectClone = Instantiate(playerDamageEffect,currentBoss.transform);
+                EffectClone.transform.rotation = Quaternion.Euler(0, 0, EffectrandomZ);
                 Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
                 currentHealth += damage;
                 UpdateHealthDisplay();
@@ -491,11 +493,27 @@ public class BossController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            damage = 10000f;
+            currentHealth = 10000f;
         }
 
         randomx = Random.Range(-3, 3);
         randomy = Random.Range(-3, 3);
+        EffectrandomZ = Random.Range(-360, 360);
+
+        if (!phase2Triggered && currentHealth >= maxHealth * 0.5f)
+        {
+            phase2Triggered = true;
+            isPhase2 = true;
+
+            if (projectileManager != null)
+            {
+                var manager = projectileManager.GetComponent<ProjectileManagerRandom>();
+                if (manager != null)
+                {
+                    manager.ActivatePhase2();
+                }
+            }
+        }
     }
 
 

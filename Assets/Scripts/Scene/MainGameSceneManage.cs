@@ -14,6 +14,7 @@ public class MainGameSceneManage : MonoBehaviour
     [SerializeField] AudioSource SEsource;
     [SerializeField] GameObject Crossfade;
     [SerializeField] Animator transition;
+    public bool isTutorialPause = false;
     void Start()
     {
         transition = Crossfade.GetComponent<Animator>();
@@ -24,25 +25,28 @@ public class MainGameSceneManage : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !isPausing || Input.GetButtonDown("Pause") && !isPausing)
+        if (!isTutorialPause)
         {
-            BGMsource.Pause();
-            SEsource.Pause();
-            Cursor.visible = true;
-            isPausing = true;
-            pausePanel.SetActive(true);
-            Time.timeScale = 0;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape) && isPausing || Input.GetButtonDown("Pause") && !isPausing)
-        {
-            BGMsource.Play();
-            SEsource.Play();
-            Cursor.visible = false;
-            isPausing = false;
-            pausePanel.SetActive(false);
-            Time.timeScale = 1;
-            Cursor.lockState = CursorLockMode.Locked;
+            if (Input.GetKeyDown(KeyCode.Escape) && !isPausing || Input.GetButtonDown("Pause") && !isPausing)
+            {
+                BGMsource.Pause();
+                SEsource.Pause();
+                Cursor.visible = true;
+                isPausing = true;
+                pausePanel.SetActive(true);
+                Time.timeScale = 0;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape) && isPausing || Input.GetButtonDown("Pause") && !isPausing)
+            {
+                BGMsource.Play();
+                SEsource.Play();
+                Cursor.visible = false;
+                isPausing = false;
+                pausePanel.SetActive(false);
+                Time.timeScale = 1;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
 

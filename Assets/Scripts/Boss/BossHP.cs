@@ -7,11 +7,13 @@ public class BossHP : MonoBehaviour
 {
     [SerializeField] private Collider2D damageCollider;
     private BossController bossController;
-
     void Awake()
     {
-        bossController = FindObjectOfType<BossController>();
-    }
+        if (damageCollider == null)
+        {
+            damageCollider = GetComponent<Collider2D>();
+        }
+        bossController = FindObjectOfType<BossController>();    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {

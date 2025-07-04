@@ -216,7 +216,7 @@ public class WarningProjectileController : MonoBehaviour
             }
             else if (direction == Vector2.right)
             {
-                Projectiles[i].transform.rotation = Quaternion.Euler(0, 0, 180f);
+                Projectiles[i].transform.rotation = Quaternion.Euler(0, 0, 0);
             }
 
             if (projectileRigidbodies[i] != null)

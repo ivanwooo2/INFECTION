@@ -22,6 +22,7 @@ public class ParabolaProjectile : MonoBehaviour
 
     void Start()
     {
+        GetComponent<Collider2D>().enabled = false;
         _transform = transform;
         SoundEffect = GameObject.FindGameObjectWithTag("SoundEffectPlayer");
         stone = SoundEffect.GetComponent<AudioSource>();
@@ -72,7 +73,6 @@ public class ParabolaProjectile : MonoBehaviour
 
     IEnumerator EnableDamageOnArrival()
     {
-        GetComponent<Collider2D>().enabled = false;
         yield return new WaitForSeconds(duration - 0.1f);
         canDamage = true;
         GetComponent<Collider2D>().enabled = true;

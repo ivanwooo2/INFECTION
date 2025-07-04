@@ -25,6 +25,8 @@ public class ProjectileManagerRandom : MonoBehaviour
         public bool isReady = true;
     }
 
+    private Dictionary<AttackPattern, float> originalCooldowns = new Dictionary<AttackPattern, float>();
+    private bool isPhase2Active = false;
     public GameObject linearBombPrefab;
     public GameObject warningProjectilePrefab;
     [SerializeField] private GameObject expandCirclePrefab;
@@ -78,7 +80,7 @@ public class ProjectileManagerRandom : MonoBehaviour
 
     IEnumerator AttackScheduler()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
         while (!isStopped)
         {
             while (true)
@@ -166,6 +168,23 @@ public class ProjectileManagerRandom : MonoBehaviour
         pattern.isReady = true;
     }
 
+    public void ActivatePhase2()
+    {
+        if (isPhase2Active) return;
+
+        isPhase2Active = true;
+
+        foreach (AttackPattern pattern in patterns)
+        {
+            if (!originalCooldowns.ContainsKey(pattern))
+            {
+                originalCooldowns.Add(pattern, pattern.cooldown);
+            }
+
+            pattern.cooldown /= 2f;
+        }
+    }
+
     IEnumerator Pattern1Logic()
     {
         Vector2 spawnPos = new Vector2(
@@ -179,13 +198,19 @@ public class ProjectileManagerRandom : MonoBehaviour
         activeProjectiles.Add(circle);
 
         ExpandCircle expandComp = circle.GetComponent<ExpandCircle>();
+        ExpandCircleInanse expandCompInanse = circle.GetComponent<ExpandCircleInanse>();
 
         yield return new WaitForSeconds(1f);
-        yield return new WaitUntil(() => circle == null);
+        //yield return new WaitUntil(() => circle == null);
 
         if (expandComp != null)
         {
             expandComp.currentDepth = 0;
+        }
+
+        if (expandCompInanse != null)
+        {
+            expandCompInanse.currentDepth = 0;
         }
     }
 
@@ -198,7 +223,7 @@ public class ProjectileManagerRandom : MonoBehaviour
         activeProjectiles.Add(bomb);
         bomb.GetComponent<LinearBomber>().InitializeDirection(isLeft);
 
-        yield return new WaitUntil(() => bomb == null);
+        //yield return new WaitUntil(() => bomb == null);
         yield return new WaitForSeconds(1f);
     }
 
@@ -216,7 +241,7 @@ public class ProjectileManagerRandom : MonoBehaviour
     {
         GameObject projectile = Instantiate(warningProjectilePrefab,Vector3.zero,Quaternion.identity);
         activeProjectiles.Add(projectile);
-        yield return new WaitUntil(() => projectile == null);
+        //yield return new WaitUntil(() => projectile == null);
         yield return new WaitForSeconds(1f);
     }
 
@@ -306,6 +331,7 @@ public class ProjectileManagerRandom : MonoBehaviour
         laserComp.Initialize(pattern.laserSpawnPoints);
 
         yield return new WaitUntil(() => laserComp.IsComplete);
+        yield return new WaitForSeconds(1f);
         Destroy(laserObj);
     }
 }

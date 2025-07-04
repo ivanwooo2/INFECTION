@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8942667136163812638}
   - component: {fileID: 3510622726086773495}
   - component: {fileID: 6413294336358602083}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WarningProjectilenormal
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
   projectileSpacing: 1
   projectileSpeed: 30
   aliveTime: 3
-  damage: 7
+  damage: 12
   downwardRotation: -90
   leftwardRotation: 180
   bow: {fileID: 6413294336358602083}
@@ -142,7 +142,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -236,7 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2082901995182177382}
   - component: {fileID: 1698750407579928995}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WarningIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7712051694392134452}
   - component: {fileID: 3080997925937105547}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 1019489859855829459}
   - component: {fileID: 8201657346669869174}
   - component: {fileID: 3214318431873422980}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ProjectileBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}

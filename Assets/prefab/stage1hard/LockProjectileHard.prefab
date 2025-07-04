@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6612518516594292256}
   - component: {fileID: 6915897645477218490}
   - component: {fileID: -8238129807142480019}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LockProjectileHard
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 35
-  damage: 7
+  damage: 12
   lifetime: 4
   bow1: {fileID: -8238129807142480019}
   sfx1: {fileID: 8300000, guid: a98b90be2a712444b85277c0926f9fe6, type: 3}
@@ -151,7 +151,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.35
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

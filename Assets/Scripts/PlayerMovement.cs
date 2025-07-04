@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerSkillmoveSpeed;
     [SerializeField] private float originalMoveSpeed;
     [SerializeField] private Rigidbody2D playerRB;
-    [SerializeField] private SpriteRenderer SpriteRenderer;
     [SerializeField] private Sprite origin;
     [SerializeField] private Sprite Skill;
     private Vector2 playerPosition;
@@ -202,7 +201,10 @@ public class PlayerMovement : MonoBehaviour
         activeMoveSpeed = playerSkillmoveSpeed;
         SkillusingImage.SetActive(true);
         SkillCooldownBG.SetActive(false);
-        bossController.ChrSkill1(skillDuration);
+        if (bossController != null)
+        {
+            bossController.ChrSkill1(skillDuration);
+        }
         yield return new WaitForSeconds(skillDuration);
         SkillusingImage.SetActive(false);
         SkillCooldownBG.SetActive(true);
@@ -212,7 +214,6 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer.sprite = origin;
         activeMoveSpeed = originalMoveSpeed;
         playerHealth.ToggleSkill(false);
-        //yield return new WaitForSeconds(skillCooldown);
         skillCooldownRemaining = skillCooldown;
         while (skillCooldownRemaining > 0)
         {

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5389287515441009522}
   - component: {fileID: 6575356257481767242}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: InnerCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3286302739458967066}
   - component: {fileID: 9033699566975157502}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ExpandCirclehard
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6954013339021929685}
   - component: {fileID: 7831994356677319561}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OuterCircle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -122,6 +122,10 @@ public class LevelSelevtion : MonoBehaviour
             {
                 StartCoroutine(GoHard());
             }
+            else if (selectedIndex == 2)
+            {
+                StartCoroutine(GoInsane());
+            }
         }
     }
 
@@ -152,6 +156,13 @@ public class LevelSelevtion : MonoBehaviour
         transition.SetBool("Start", true);
         yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene("Stage1hard");
+    }
+
+    IEnumerator GoInsane()
+    {
+        transition.SetBool("Start", true);
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("Stage1Inanse");
     }
 
     void Update()

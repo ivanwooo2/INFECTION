@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8722284832920975520}
   - component: {fileID: 5156473405212597116}
   - component: {fileID: 5539511906729242814}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LockOnLaserHard
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}

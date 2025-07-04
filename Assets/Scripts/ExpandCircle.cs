@@ -69,10 +69,16 @@ public class ExpandCircle : MonoBehaviour
         GameObject projectile = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         ParabolaProjectile parabola = projectile.GetComponent<ParabolaProjectile>();
 
-        if (currentDepth >= 1)
+        if (currentDepth == 1)
         {
             childProjectileScale = projectile.transform.localScale;
             Vector3 projectileScale = childProjectileScale * 0.5f;
+            projectile.transform.localScale = projectileScale;
+        }
+        else if (currentDepth == 2)
+        {
+            childProjectileScale = projectile.transform.localScale;
+            Vector3 projectileScale = childProjectileScale * 0.2f;
             projectile.transform.localScale = projectileScale;
         }
 

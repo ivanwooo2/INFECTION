@@ -935,7 +935,7 @@ Transform:
   m_GameObject: {fileID: 305352970}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15, y: 15, z: 0}
+  m_LocalPosition: {x: 20, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2106,7 +2106,7 @@ Transform:
   m_GameObject: {fileID: 739443579}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -15, y: 15, z: 0}
+  m_LocalPosition: {x: -20, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2216,7 +2216,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.4
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3740,7 +3740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playermoveSpeed: 7
   SlowMoveSpeed: 5.5
-  playerSkillmoveSpeed: 8
+  playerSkillmoveSpeed: 10
   originalMoveSpeed: 0
   playerRB: {fileID: 1443496793}
   SpriteRenderer: {fileID: 0}
@@ -4178,7 +4178,7 @@ Transform:
   m_GameObject: {fileID: 1480592577}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.5, y: 15, z: 0}
+  m_LocalPosition: {x: 10, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4284,7 +4284,7 @@ Transform:
   m_GameObject: {fileID: 1515340631}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.5, y: 15, z: 0}
+  m_LocalPosition: {x: -10, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4394,7 +4394,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3f41b71ed33c57d4c875800e0293f9ac, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -4773,7 +4773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileManager: {fileID: 2090056209}
-  playerDamageEffect: {fileID: 6904808050845818754, guid: c6e1723cc576fec469873416dd2cc2bb, type: 3}
+  playerDamageEffect: {fileID: 5613851852929123373, guid: 275cdfc36c525e647b6a55f407c2d579, type: 3}
   BossPreFab: {fileID: 4240156294350419843, guid: c0ce9c382ebc41c42a2050e2ed63f504, type: 3}
   LastBossPrefab: {fileID: 7481061156276564635, guid: f2cd0ed8d934d2448b69c4d79599fb2c, type: 3}
   minInterval: 0
@@ -4809,22 +4809,22 @@ MonoBehaviour:
   healthCanvas: {fileID: 2134831041}
   maxHealth: 1500
   currentHealth: 0
-  damage: 1.28
-  damageMult: 2.5
+  damage: 3.5
+  damageMult: 1.5
   damageInterval: 0.5
-  SkilldamageInterval: 0.1
+  SkilldamageInterval: 0.3
   originDamageInterval: 0
   activeDamageInterval: 0
   healthText: {fileID: 300103783}
   weakPointPrefab: {fileID: 8071573785752967623, guid: 477e3d6698444ed43ba39c8cab1874e8, type: 3}
   weakPointDuration: 1.5
-  weakPointDamage: 100
+  weakPointDamage: 60
   dashCheckDistance: 3
   weakPointOffsets:
-  - {x: 3.5, y: 3.5}
-  - {x: -3.5, y: -3.5}
-  - {x: -3.5, y: 3.5}
-  - {x: 3.5, y: -3.5}
+  - {x: 3.65, y: 3.65}
+  - {x: -3.65, y: -3.65}
+  - {x: -3.65, y: 3.65}
+  - {x: 3.65, y: -3.65}
   arc: {fileID: 1589228447}
   arc2: {fileID: 1589228450}
   attack1: {fileID: 8300000, guid: 038fda32d7b497e4586a789fc71f5871, type: 3}
@@ -4836,6 +4836,7 @@ MonoBehaviour:
   BossDestroyPrefab: {fileID: 5266316308429880794, guid: 3b613e587c9d6d74aa001e6f30079d93, type: 3}
   randomx: 0
   randomy: 0
+  EffectrandomZ: 0
 --- !u!4 &1589228449
 Transform:
   m_ObjectHideFlags: 0
@@ -6494,8 +6495,8 @@ MonoBehaviour:
   expandCirclePrefab: {fileID: 6658452603097509866, guid: 82ab18cd7f0ed014e884ba37970a7824, type: 3}
   patterns:
   - name: "\u6295\u77F3\u6A5F"
-    cooldown: 0.8
-    weight: 0.9
+    cooldown: 1.2
+    weight: 9
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 0}
@@ -6504,8 +6505,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u82E6\u7121"
-    cooldown: 1.85
-    weight: 3.7
+    cooldown: 3.5
+    weight: 40
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 0}
@@ -6514,8 +6515,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u7BAD"
-    cooldown: 0.35
-    weight: 2.1
+    cooldown: 1
+    weight: 26
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 0}
@@ -6524,8 +6525,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u5F29\u7BAD"
-    cooldown: 0.5
-    weight: 1.1
+    cooldown: 1
+    weight: 11
     lockOnLaserPrefab: {fileID: 9119279951547032459, guid: 3c0396f11dd67fb4ca21199fdc35caeb, type: 3}
     laserSpawnPoints:
     - {fileID: 739443580}
@@ -6539,14 +6540,14 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u528D"
-    cooldown: 0.55
-    weight: 1.3
+    cooldown: 3
+    weight: 13
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 8223818534247213292, guid: 69662c68e6a2c33479dc90c153214d61, type: 3}
     directionChangeSpeed: 8.5
     phase1Duration: 5
-    phase2Duration: 1010
+    phase2Duration: 3
     isReady: 1
 --- !u!114 &2090056212
 MonoBehaviour:

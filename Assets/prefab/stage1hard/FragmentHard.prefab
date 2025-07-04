@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4790768638812872082}
   - component: {fileID: 5687037682830436944}
   - component: {fileID: 4562304451149673246}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FragmentHard
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dded920034bd6947bd5e8adbb81d144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
+  damage: 15
   lifetime: 6
   rotation: {x: 0, y: 0, z: 150}
 --- !u!50 &5687037682830436944

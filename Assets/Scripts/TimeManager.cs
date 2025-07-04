@@ -15,6 +15,7 @@ public class TimeManager : MonoBehaviour
 
     private GameObject player;
     private PlayerHealth playerHealth;
+    public bool isTutorial = false;
 
     public float CurrentTime => currentTime;
     public static float LastRemainingTime { get; private set; }
@@ -38,7 +39,7 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (!isGameOver && SceneManager.GetActiveScene().name != "ResultScene")
+        if (!isGameOver && SceneManager.GetActiveScene().name != "ResultScene" && isTutorial == false)
         {
             currentTime -= Time.deltaTime;
             UpdateTimerDisplay();
@@ -71,9 +72,20 @@ public class TimeManager : MonoBehaviour
             projectileManager.CleanupProjectiles();
         }
 
+        BossController bossController = FindObjectOfType<BossController>();
+        if (bossController != null && bossController.IsBossDead)
+        {
+            SceneManager.LoadScene("ResultScene");
+            return;
+        }
+
         if (playerHealth.currentHealth > 0)
         {
             SceneManager.LoadScene("ResultScene");
+        }
+        else if (currentTime <= 0)
+        {
+            SceneManager.LoadScene("GameOverScene");
         }
         else
         {

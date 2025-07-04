@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class MainMenuController : MonoBehaviour
 
     private int selectedIndex;
     [SerializeField] GameObject mainmenu;
+    [SerializeField] private GameObject Panel;
 
     [SerializeField] GameObject settingPanel;
     [SerializeField] Slider volumeSlider;
@@ -22,8 +24,14 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private AudioSource AudioSource;
     [SerializeField] private AudioClip confiem,back,StartButton;
 
+    public bool isTutorialSwitcherOpen = false;
     void Start()
     {
+        TimeManager gameManager = FindObjectOfType<TimeManager>();
+        if (gameManager != null)
+        {
+            Destroy(gameManager.gameObject);
+        }
         Time.timeScale = 1;
         transition.SetBool("Start", false);
         transition = FindAnyObjectByType<Animator>();
@@ -90,6 +98,16 @@ public class MainMenuController : MonoBehaviour
         if (Input.GetButtonDown("Submit"))
         {
             PlayButton();
+        }
+        if (Input.GetKeyDown(KeyCode.T) && !isTutorialSwitcherOpen)
+        {
+            Panel.SetActive(true);
+            isTutorialSwitcherOpen = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.T) && isTutorialSwitcherOpen)
+        {
+            Panel.SetActive(false);
+            isTutorialSwitcherOpen = false;
         }
     }
 }

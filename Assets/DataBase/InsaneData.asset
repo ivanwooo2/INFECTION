@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2afaf402461537c41a68c2bec6cc0dac, type: 3}
   m_Name: InsaneData
   m_EditorClassIdentifier: 
-  isUnlocked: 0
+  isUnlocked: 1
   lockedSprite: {fileID: 21300000, guid: e855456524fde2d4bb4400e9d5b8dfa0, type: 3}
   unlockedSprite: {fileID: 21300000, guid: 5f581b914905a1747895424d5e7e7869, type: 3}
   BackGround: {fileID: 21300000, guid: 3ab96e9fea1eaf84a919adc5af4967b4, type: 3}

@@ -2419,7 +2419,6 @@ MonoBehaviour:
   playerSkillmoveSpeed: 10
   originalMoveSpeed: 0
   playerRB: {fileID: 1036304325}
-  SpriteRenderer: {fileID: 0}
   origin: {fileID: 21300000, guid: 607e6bf205c41e04f9cdc219ff2cf768, type: 3}
   Skill: {fileID: 21300000, guid: 27152b22dc85b8b4f9f8c00053c8fdb7, type: 3}
   activeMoveSpeed: 0
@@ -2586,6 +2585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 300
   currentHealth: 0
+  hasPersisted: 0
   healthBackground: {fileID: 2076411772}
   healthFill: {fileID: 620500812}
   invincibleDuration: 0.25
@@ -3266,6 +3266,7 @@ MonoBehaviour:
   totalTime: 301
   isGameOver: 0
   timerText: {fileID: 2115862095}
+  isTutorial: 0
 --- !u!1 &1132591258
 GameObject:
   m_ObjectHideFlags: 0
@@ -3780,7 +3781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectileManager: {fileID: 1991127600}
-  playerDamageEffect: {fileID: 6904808050845818754, guid: c6e1723cc576fec469873416dd2cc2bb, type: 3}
+  playerDamageEffect: {fileID: 5613851852929123373, guid: 275cdfc36c525e647b6a55f407c2d579, type: 3}
   BossPreFab: {fileID: 4240156294350419843, guid: c0ce9c382ebc41c42a2050e2ed63f504, type: 3}
   LastBossPrefab: {fileID: 7481061156276564635, guid: f2cd0ed8d934d2448b69c4d79599fb2c, type: 3}
   minInterval: 0
@@ -3814,18 +3815,18 @@ MonoBehaviour:
   - {fileID: 1616473255}
   - {fileID: 1166525530}
   healthCanvas: {fileID: 391094979}
-  maxHealth: 1500
+  maxHealth: 1350
   currentHealth: 0
-  damage: 1.28
-  damageMult: 2.5
+  damage: 3.5
+  damageMult: 1.5
   damageInterval: 0.5
-  SkilldamageInterval: 0.1
+  SkilldamageInterval: 0.3
   originDamageInterval: 0
   activeDamageInterval: 0
   healthText: {fileID: 756789245}
   weakPointPrefab: {fileID: 8071573785752967623, guid: 477e3d6698444ed43ba39c8cab1874e8, type: 3}
   weakPointDuration: 1.5
-  weakPointDamage: 100
+  weakPointDamage: 60
   dashCheckDistance: 3
   weakPointOffsets:
   - {x: 3.65, y: 3.65}
@@ -3843,6 +3844,7 @@ MonoBehaviour:
   BossDestroyPrefab: {fileID: 5266316308429880794, guid: 3b613e587c9d6d74aa001e6f30079d93, type: 3}
   randomx: 0
   randomy: 0
+  EffectrandomZ: 0
 --- !u!82 &1175875876
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4407,6 +4409,7 @@ MonoBehaviour:
   SEsource: {fileID: 0}
   Crossfade: {fileID: 1193872506}
   transition: {fileID: 0}
+  isTutorialPause: 0
 --- !u!4 &1350912653
 Transform:
   m_ObjectHideFlags: 0
@@ -5538,7 +5541,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 3f41b71ed33c57d4c875800e0293f9ac, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.25
+  m_Volume: 1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5944,8 +5947,8 @@ MonoBehaviour:
   expandCirclePrefab: {fileID: 6658452603097509866, guid: 2811215018e170d4a87f2cd1f16bae5b, type: 3}
   patterns:
   - name: "\u6295\u77F3\u6A5F"
-    cooldown: 0.75
-    weight: 0.9
+    cooldown: 1.5
+    weight: 9
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 0}
@@ -5954,8 +5957,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u82E6\u7121"
-    cooldown: 1.85
-    weight: 3.7
+    cooldown: 4.5
+    weight: 37
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 0}
@@ -5964,8 +5967,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u7BAD"
-    cooldown: 0.5
-    weight: 1.1
+    cooldown: 1.5
+    weight: 11
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 0}
@@ -5974,8 +5977,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u5F29\u7BAD"
-    cooldown: 0.55
-    weight: 2.1
+    cooldown: 1.5
+    weight: 21
     lockOnLaserPrefab: {fileID: 9119279951547032459, guid: 34f77fa9ac1d82a4492a28f75191f9e6, type: 3}
     laserSpawnPoints:
     - {fileID: 1508918748}
@@ -5987,8 +5990,8 @@ MonoBehaviour:
     phase2Duration: 1
     isReady: 1
   - name: "\u528D"
-    cooldown: 0.75
-    weight: 1.3
+    cooldown: 4
+    weight: 13
     lockOnLaserPrefab: {fileID: 0}
     laserSpawnPoints: []
     directionChangeProjectilePrefab: {fileID: 8223818534247213292, guid: 1137d80f574a0784f9d7bc3d504e925b, type: 3}
@@ -6557,7 +6560,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.15
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0

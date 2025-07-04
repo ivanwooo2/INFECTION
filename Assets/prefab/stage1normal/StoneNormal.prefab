@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8030101974083995143}
   - component: {fileID: 7380874253284043728}
   - component: {fileID: 8193230941237717756}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: StoneNormal
   m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
