@@ -19,6 +19,8 @@ public class Stage2BossController : MonoBehaviour
     [SerializeField] public float maxInterval;
     [SerializeField] public float moveSpeed;
     [SerializeField] public float stayDuration;
+    [SerializeField] private soldierManager SoldierPrefab;
+    [SerializeField] private GameObject[] soldierPos;
 
     [SerializeField] public Vector2 initialSpawnViewport;
     [SerializeField] public Vector2 initialTargetViewport;
@@ -57,7 +59,7 @@ public class Stage2BossController : MonoBehaviour
     public AudioSource arc, arc2;
     public AudioClip attack1, attack2, DestroySE;
 
-    private GameObject currentBoss;
+    public GameObject currentBoss;
 
     private GameObject LastBoss;
     private PlayerHealth playerHealth;
@@ -163,7 +165,6 @@ public class Stage2BossController : MonoBehaviour
         //yield return new WaitForSeconds(5f);
         isExit = true;
         yield return StartCoroutine(MoveTo(exitPos));
-
         if (currentWeakPoint != null)
         {
             Destroy(currentWeakPoint);
@@ -208,7 +209,6 @@ public class Stage2BossController : MonoBehaviour
     {
         return Camera.main.ViewportToWorldPoint(new Vector3(viewportPos.x, viewportPos.y, 10));
     }
-
     IEnumerator MoveTo(Vector3 target)
     {
         if (timeManager.isGameOver == true)
@@ -225,18 +225,34 @@ public class Stage2BossController : MonoBehaviour
                 progress += Time.deltaTime * moveSpeed;
                 currentBoss.transform.position = Vector3.Lerp(startPos, target, progress);
                 yield return null;
+
             }
             isSpawn = false;
         }
         if (isExit)
         {
+            bool Spawnsoldier = false;
             while (progress < 1)
             {
                 progress += Time.deltaTime * moveSpeed / 5;
                 currentBoss.transform.position = Vector3.Lerp(startPos, target, progress);
-                yield return null;
+                if (currentBoss.transform.position.x >= -0.1f && currentBoss.transform.position.x <= 0.1f && Spawnsoldier == false)
+                {
+                    yield return new WaitForSeconds(0.5f);
+                    for (int i = 0; i < soldierPos.Length; i++)
+                    {
+                        soldierManager Soldier = Instantiate<soldierManager>(SoldierPrefab, currentBoss.transform.position,Quaternion.identity);
+                        StartCoroutine(Soldier.GoToTarget(soldierPos[i].transform.position, currentBoss.transform.position, 2f));
+                    }
+                    Spawnsoldier = true;
+                }
+                else
+                {
+                    yield return null;
+                }
             }
             isExit = false;
+            Spawnsoldier = true;
         }
     }
 

@@ -1286,6 +1286,7 @@ MonoBehaviour:
   skillDuration: 6
   skillCooldown: 10
   scaleMultiplier: 0.5
+  isSkilling: 0
   playerTR: {fileID: 122433208}
   Player: {fileID: 122433206}
   dash: {fileID: 8300000, guid: 67ce9de984a15464383835a7707394e0, type: 3}
@@ -5134,8 +5135,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.8125, y: 0.5222223}
   m_AnchorMax: {x: 0.8125, y: 0.5222223}
-  m_AnchoredPosition: {x: -12.400024, y: -23.4}
-  m_SizeDelta: {x: 250, y: 250}
+  m_AnchoredPosition: {x: 1.5, y: 32.3}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1175226501
 MonoBehaviour:
@@ -7102,12 +7103,13 @@ MonoBehaviour:
   playerDamageEffect: {fileID: 5613851852929123373, guid: 275cdfc36c525e647b6a55f407c2d579, type: 3}
   BossPreFab: {fileID: 1564209958486478751, guid: 28252f51a52f3a1479ae2a3787014bac, type: 3}
   LastBossPrefab: {fileID: 7481061156276564635, guid: f2cd0ed8d934d2448b69c4d79599fb2c, type: 3}
+  Player1Attack: {fileID: 2946986613894663536, guid: 712df930af469cb4e87c564c8c2bb216, type: 3}
   minInterval: 0
   maxInterval: 1
   moveSpeed: 1.5
   stayDuration: 15
   initialSpawnViewport: {x: 0.5, y: 1.5}
-  initialTargetViewport: {x: 0.5, y: 0.95}
+  initialTargetViewport: {x: 0.5, y: 0.75}
   verticalMoveDistance: 0.5
   horizontalMoveDistance: 0.5
   healthBars:
@@ -7156,6 +7158,7 @@ MonoBehaviour:
   attack1: {fileID: 8300000, guid: 038fda32d7b497e4586a789fc71f5871, type: 3}
   attack2: {fileID: 8300000, guid: 189a9a812fe06fc4ea282a19cfe4a337, type: 3}
   DestroySE: {fileID: 8300000, guid: d5190c6656d89b4448bf8a16707811c0, type: 3}
+  currentBoss: {fileID: 0}
   Crossfade: {fileID: 649615721}
   transition: {fileID: 0}
   transitionTime: 1

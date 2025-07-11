@@ -15,6 +15,7 @@ public class BossManagerTutorial : MonoBehaviour
     private Animator BossAnimator;
     private GameObject Boss;
     [SerializeField] private GameObject LastBossPrefab;
+    [SerializeField] private GameObject Player1Attack;
     [SerializeField] public float minInterval;
     [SerializeField] public float maxInterval;
     [SerializeField] public float moveSpeed;
@@ -57,7 +58,7 @@ public class BossManagerTutorial : MonoBehaviour
     public AudioSource arc, arc2;
     public AudioClip attack1, attack2, DestroySE;
 
-    private GameObject currentBoss;
+    public GameObject currentBoss;
 
     private GameObject LastBoss;
     private PlayerHealth playerHealth;
@@ -178,6 +179,10 @@ public class BossManagerTutorial : MonoBehaviour
         {
             if (currentBoss != null)
             {
+                GameObject Player1attack = Instantiate(Player1Attack, playerTransform.position, Quaternion.identity);
+                Vector3 direction = currentBoss.transform.position - playerTransform.position;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                Player1attack.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
                 arc.clip = attack1;
                 arc.Play();
                 GameObject EffectClone = Instantiate(playerDamageEffect, currentBoss.transform);

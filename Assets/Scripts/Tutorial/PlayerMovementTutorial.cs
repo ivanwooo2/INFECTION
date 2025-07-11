@@ -38,7 +38,7 @@ public class PlayerMovementTutorial : MonoBehaviour
     [SerializeField] private float skillCooldown = 10f;
     [SerializeField] private float scaleMultiplier = 0.5f;
     private bool isSkillReady = true;
-    private bool isSkilling;
+    public bool isSkilling;
     private PlayerHealth playerHealth;
     private BossManagerTutorial BossManagerTutorial;
 
