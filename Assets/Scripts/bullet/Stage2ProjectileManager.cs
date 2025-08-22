@@ -12,24 +12,24 @@ public class Stage2ProjectileManager : MonoBehaviour
         public float cooldown = 2.1f;
         public float weight = 1;
 
-        [Header("導彈群")]
+        [Header("missileGroup")]
         public GameObject missilePrefab;
         public GameObject[] missileSpawnPoints;
         public int missileInterval;
         public float missileSpawnSpeed;
 
-        [Header("追蹤導彈")]
+        [Header("aimMissile")]
         public GameObject aimMissilePrefab;
         public int aimMissileNumber;
         public float aimMissileinterval;
 
-        [Header("疾風傳")]
+        [Header("narudo")]
         public GameObject FireBottlePrefab;
 
-        [Header("破片手雷")]
+        [Header("grenade")]
         public GameObject fraggrenadePrefab;
 
-        [Header("狙擊槍")]
+        [Header("sniper")]
         public GameObject SniperRifle;
         public Transform Sniperpoint;
 
@@ -138,23 +138,23 @@ public class Stage2ProjectileManager : MonoBehaviour
     IEnumerator ExecuteAttack(AttackPattern pattern)
     {
         pattern.isReady = false;
-        Debug.Log($"觸發攻擊: {pattern.name}");
+        Debug.Log($"AttackStart: {pattern.name}");
 
         switch (pattern.name)
         {
-            case "導彈群":
+            case "missileGroup":
                 yield return StartCoroutine(Pattern1Logic(pattern));
                 break;
-            case "追蹤導彈":
+            case "aimMissile":
                 yield return StartCoroutine(Pattern2Logic(pattern));
                 break;
-            case "疾風傳":
+            case "narudo":
                 yield return StartCoroutine(Pattern3Logic(pattern));
                 break;
-            case "破片手雷":
+            case "grenade":
                 yield return StartCoroutine(Pattern4logic(pattern));
                 break;
-            case "狙擊槍":
+            case "sniper":
                 yield return StartCoroutine(Pattern5logic(pattern));
                 break;
         }
