@@ -15,6 +15,7 @@ public class Stage2BossController : MonoBehaviour
     private Animator BossAnimator;
     private GameObject Boss;
     [SerializeField] private GameObject LastBossPrefab;
+    [SerializeField] private GameObject Player1Attack;
     [SerializeField] public float minInterval;
     [SerializeField] public float maxInterval;
     [SerializeField] public float moveSpeed;
@@ -91,6 +92,7 @@ public class Stage2BossController : MonoBehaviour
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = playerTransform.GetComponent<PlayerHealth>();
         StartCoroutine(InitialEntrance());
+        StartCoroutine(WeakPointSpawnLoop());
     }
     void InitializeHealthSystem()
     {
@@ -173,6 +175,16 @@ public class Stage2BossController : MonoBehaviour
 
         Destroy(currentBoss);
         isOperating = false;
+    }
+
+    public void ChrSkill1(float duration)
+    {
+        if (duration > 0)
+        {
+            i = duration;
+            damage = doubleDamage;
+            activeDamageInterval = SkilldamageInterval;
+        }
     }
 
     Vector3 GetSideSpawnPosition(int side)
@@ -292,6 +304,10 @@ public class Stage2BossController : MonoBehaviour
         {
             if (currentBoss != null)
             {
+                GameObject Player1attack = Instantiate(Player1Attack, playerTransform.position, Quaternion.identity);
+                Vector3 direction = (currentBoss.transform.position - playerTransform.position).normalized;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                Player1attack.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
                 arc.clip = attack1;
                 arc.Play();
                 GameObject EffectClone = Instantiate(playerDamageEffect, currentBoss.transform);
@@ -405,10 +421,97 @@ public class Stage2BossController : MonoBehaviour
         timeManager.LoadResultScene();
         yield return null;
     }
+
+    void TryAttackWeakPoint()
+    {
+        if (isWeakPointActive && currentWeakPoint != null)
+        {
+            float distance = Vector3.Distance(
+                playerTransform.position,
+                currentWeakPoint.transform.position
+            );
+
+            if (distance <= dashCheckDistance)
+            {
+                arc2.clip = attack2;
+                arc2.Play();
+                GameObject WeakPointEffect = Instantiate(BossDestroyPrefab);
+                WeakPointEffect.transform.position = currentWeakPoint.transform.position;
+                DealWeakPointDamage();
+                Destroy(currentWeakPoint);
+                isWeakPointActive = false;
+            }
+        }
+    }
+
+    IEnumerator WeakPointSpawnLoop()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(5f, 13f));
+            if (!isWeakPointActive && currentBoss != null)
+            {
+                SpawnClosestWeakPoint();
+            }
+        }
+    }
+
+    void SpawnClosestWeakPoint()
+    {
+        if (currentBoss == null) return;
+
+        Vector2 closestOffset = Vector2.zero;
+        float minDistance = Mathf.Infinity;
+
+        foreach (Vector2 offset in weakPointOffsets)
+        {
+            Vector3 worldPos = currentBoss.transform.position + new Vector3(offset.x, offset.y, 0);
+            float distance = Vector3.Distance(playerTransform.position, worldPos);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestOffset = offset;
+            }
+        }
+
+        currentWeakPoint = Instantiate(weakPointPrefab, currentBoss.transform);
+        currentWeakPoint.transform.localPosition = closestOffset;
+        isWeakPointActive = true;
+        StartCoroutine(RemoveWeakPointAfterDelay());
+    }
+
+    IEnumerator RemoveWeakPointAfterDelay()
+    {
+        yield return new WaitForSeconds(weakPointDuration);
+        if (currentWeakPoint != null)
+        {
+            Destroy(currentWeakPoint);
+            isWeakPointActive = false;
+        }
+    }
+
+    void DealWeakPointDamage()
+    {
+        currentHealth = Mathf.Clamp(currentHealth + weakPointDamage, 0, maxHealth);
+
+        UpdateHealthDisplay();
+
+        if (currentHealth >= maxHealth)
+        {
+            StartCoroutine(DestroyBoss());
+        }
+
+        // AudioManager.Instance.Play("WeakPointHit");
+    }
+
     void Update()
     {
         float percentage = (currentHealth * 100 / maxHealth);
         healthText.SetText($"{Mathf.RoundToInt(percentage)} %");
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("Weakpoint"))
+        {
+            TryAttackWeakPoint();
+        }
 
         if (i > 0)
         {
@@ -419,6 +522,21 @@ public class Stage2BossController : MonoBehaviour
         {
             damage = originalDamage;
             activeDamageInterval = originDamageInterval;
+        }
+
+        if (!phase2Triggered && currentHealth >= maxHealth * 0.5f)
+        {
+            phase2Triggered = true;
+            isPhase2 = true;
+
+            if (projectileManager != null)
+            {
+                var manager = projectileManager.GetComponent<Stage2ProjectileManager>();
+                if (manager != null)
+                {
+                    manager.ActivatePhase2();
+                }
+            }
         }
 
         randomx = Random.Range(-3, 3);

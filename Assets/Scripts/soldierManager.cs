@@ -9,6 +9,8 @@ public class soldierManager : MonoBehaviour
     [SerializeField] private GameObject BulletPrefab;
     [SerializeField] private int BulletCount;
     [SerializeField] private GameObject Shootingpoint;
+    [SerializeField] private float ShootInterval;
+    [SerializeField] private GameObject GunPrefab;
     private float gotoframe = 0f;
     void Start()
     {
@@ -19,7 +21,11 @@ public class soldierManager : MonoBehaviour
     {
         Vector3 direction = Player.transform.position - transform.position;
         float angle = Mathf.Atan2 (direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+        GunPrefab.transform.rotation = Quaternion.Euler(0, 0, angle);
+        if (direction.x < 0)
+        {
+            GunPrefab.transform.rotation = Quaternion.Euler(180, 0, -angle);
+        }
     }
     public IEnumerator GoToTarget(Vector2 targetPosition,Vector2 startposition, float Timer)
     {
@@ -38,8 +44,9 @@ public class soldierManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
         for (int i = 0; i < BulletCount; i++)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(ShootInterval);
             GameObject Bullet = Instantiate(BulletPrefab, Shootingpoint.transform.position,Quaternion.identity);
         }
+        Destroy(gameObject);
     }
 }

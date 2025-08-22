@@ -25,6 +25,7 @@ public class FireBottle : MonoBehaviour
         stone = SoundEffect.GetComponent<AudioSource>();
         stone.clip = sfx1;
         stone.Play();
+        _transform.Rotate(rotation);
     }
     public void Initialize(Vector3 target, float travelTime)
     {
@@ -38,7 +39,6 @@ public class FireBottle : MonoBehaviour
     void Update()
     {
         if (timer > duration) return;
-        _transform.Rotate(rotation * Time.deltaTime);
         timer += Time.deltaTime;
         float normalizedTime = timer / duration;
 

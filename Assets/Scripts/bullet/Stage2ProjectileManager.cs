@@ -16,9 +16,12 @@ public class Stage2ProjectileManager : MonoBehaviour
         public GameObject missilePrefab;
         public GameObject[] missileSpawnPoints;
         public int missileInterval;
+        public float missileSpawnSpeed;
 
         [Header("°lÂÜ¾É¼u")]
         public GameObject aimMissilePrefab;
+        public int aimMissileNumber;
+        public float aimMissileinterval;
 
         [Header("¯e­·¶Ç")]
         public GameObject FireBottlePrefab;
@@ -56,6 +59,7 @@ public class Stage2ProjectileManager : MonoBehaviour
     public void CleanupProjectiles()
     {
         StopAllCoroutines();
+        StopCoroutine(AttackScheduler());
 
         var projectiles = GameObject.FindGameObjectsWithTag("EnemyProjectile");
         foreach (var proj in projectiles)
@@ -191,7 +195,7 @@ public class Stage2ProjectileManager : MonoBehaviour
         }
         for (int i = 0; i < pattern.missileInterval;i++)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(pattern.missileSpawnSpeed);
             int RandomCounts = Random.Range(0, Count);
             GameObject missile = Instantiate(pattern.missilePrefab, pattern.missileSpawnPoints[RandomCounts].transform.position, Quaternion.identity);
             activeProjectiles.Add(missile);
@@ -202,15 +206,29 @@ public class Stage2ProjectileManager : MonoBehaviour
     IEnumerator Pattern2Logic(AttackPattern pattern)
     {
         Stage2BossController = FindAnyObjectByType<Stage2BossController>();
-        if (Stage2BossController.currentBoss == null)
+        for (int i = 0; i < pattern.aimMissileNumber; i++)
         {
-            yield return null;
-        }
-        else
-        {
-            GameObject aimMissile = Instantiate(pattern.aimMissilePrefab, Stage2BossController.currentBoss.transform.position, Quaternion.identity);
-            activeProjectiles.Add(aimMissile);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(pattern.aimMissileinterval);
+            if (Stage2BossController.currentBoss == null)
+            {
+                yield return null;
+            }
+            else
+            {
+                GameObject aimMissile = Instantiate(pattern.aimMissilePrefab, Stage2BossController.currentBoss.transform.position, Quaternion.identity);
+                activeProjectiles.Add(aimMissile);
+                yield return new WaitForSeconds(1f);
+            }
+            if (Stage2BossController.currentBoss == null)
+            {
+                yield return null;
+            }
+            else
+            {
+                GameObject aimMissile = Instantiate(pattern.aimMissilePrefab, Stage2BossController.currentBoss.transform.position, Quaternion.identity);
+                activeProjectiles.Add(aimMissile);
+                yield return new WaitForSeconds(1f);
+            }
         }
     }
 
