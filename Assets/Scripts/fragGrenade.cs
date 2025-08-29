@@ -13,8 +13,10 @@ public class fragGrenade : MonoBehaviour
     public GameObject bombeffectPrefab;
     public int fragmentCount = 5;
     public float fragmentSpeed = 6f;
+    private SpriteRenderer SpriteRendererChild;
+    private GameObject frag;
 
-    private Vector2 moveDirection;
+    public Vector2 moveDirection;
     private float moveDistance;
     private Vector2 spawnPosition;
     public bool hasExploded = false;
@@ -29,10 +31,12 @@ public class fragGrenade : MonoBehaviour
     private ProjectileManagerRandom projectileManager;
     void Start()
     {
+        SpriteRendererChild = GetComponentInChildren<SpriteRenderer>();
         projectileManager = FindObjectOfType<ProjectileManagerRandom>();
         moveDirection = GetInitialDirection();
         moveDistance = Random.Range(minMoveDistance, maxMoveDistance);
         spawnPosition = transform.position;
+        frag = transform.Find("Frag").gameObject;
     }
 
     Vector2 GetInitialDirection()
@@ -59,18 +63,23 @@ public class fragGrenade : MonoBehaviour
 
         StartCoroutine(MultiPhaseExplosion());
 
-        Destroy(gameObject, 2.2f);
+        frag.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
     }
 
     IEnumerator MultiPhaseExplosion()
     {
         for (int phase = 0; phase < attackPhases; phase++)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             kuna.clip = sfx1;
             kuna.Play();
             SpawnPhaseFragments(phase);
             yield return new WaitForSeconds(phaseInterval);
         }
+        Destroy(gameObject);
     }
 
     void SpawnPhaseFragments(int phaseIndex)

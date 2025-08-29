@@ -14,10 +14,14 @@ public class Stage2BossController : MonoBehaviour
     [SerializeField] public GameObject BossPreFab;
     private Animator BossAnimator;
     private GameObject Boss;
+    private GameObject Gun;
+    private GameObject launcher;
     [SerializeField] private GameObject LastBossPrefab;
+    [SerializeField] private GameObject Player1Attack;
     [SerializeField] public float minInterval;
     [SerializeField] public float maxInterval;
     [SerializeField] public float moveSpeed;
+    private float originSpeed;
     [SerializeField] public float stayDuration;
     [SerializeField] private soldierManager SoldierPrefab;
     [SerializeField] private GameObject[] soldierPos;
@@ -33,7 +37,9 @@ public class Stage2BossController : MonoBehaviour
     [SerializeField] private float maxHealth = 300;
     [SerializeField] private float currentHealth;
     private bool isPlayerInDamageArea;
-    [SerializeField] public float damage;
+    [SerializeField] public float GameDamage;
+    [SerializeField] public float Player1damage;
+    [SerializeField] public float Player2damage;
     private float originalDamage;
     private float doubleDamage;
     [SerializeField] private float damageMult;
@@ -77,20 +83,36 @@ public class Stage2BossController : MonoBehaviour
     private bool isSpawn;
     private bool isExit;
     public bool IsBossDead { get; private set; } = false;
+
+    private bool isPausedBySkill = false;
+    private bool isMoving;
+    private int PlayerIndex;
     void Start()
     {
+        PlayerIndex = PlayerPrefs.GetInt("SelectedCharacterIndex");
+        originSpeed = moveSpeed;
         transition = Crossfade.GetComponent<Animator>();
         transition.SetBool("Start", false);
         originDamageInterval = damageInterval;
         activeDamageInterval = originDamageInterval;
         TimeManager = GetComponent<TimeManager>();
-        originalDamage = damage;
-        doubleDamage = damage * damageMult;
+        if (PlayerIndex == 0)
+        {
+            GameDamage = Player1damage;
+            originalDamage = Player1damage;
+            doubleDamage = Player1damage * damageMult;
+        }
+        else if (PlayerIndex == 1)
+        {
+            originalDamage = Player2damage;
+            GameDamage = Player2damage;
+        }
         timeManager = TimeManager.Instance;
         InitializeHealthSystem();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         playerHealth = playerTransform.GetComponent<PlayerHealth>();
         StartCoroutine(InitialEntrance());
+        StartCoroutine(WeakPointSpawnLoop());
     }
     void InitializeHealthSystem()
     {
@@ -104,6 +126,8 @@ public class Stage2BossController : MonoBehaviour
         isOperating = true;
         currentBoss = Instantiate(BossPreFab);
         Boss = currentBoss.transform.Find("Boss").gameObject;
+        Gun = currentBoss.transform.Find("gun").gameObject;
+        launcher = currentBoss.transform.Find("launcher").gameObject;
         //BossAnimator = currentBoss.GetComponent<Animator>();
         UpdateHealthDisplay();
         Vector3 startPos = ViewportToWorld(initialSpawnViewport);
@@ -125,7 +149,7 @@ public class Stage2BossController : MonoBehaviour
             Destroy(currentWeakPoint);
             isWeakPointActive = false;
         }
-
+        yield return new WaitUntil(() => isMoving == false);
         Destroy(currentBoss);
         isOperating = false;
         StartCoroutine(SpawnLoop());
@@ -135,6 +159,10 @@ public class Stage2BossController : MonoBehaviour
     {
         while (true)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             yield return new WaitForSeconds(Random.Range(minInterval, maxInterval));
             if (!isOperating) StartCoroutine(SpawnFromRandomSide());
         }
@@ -152,11 +180,13 @@ public class Stage2BossController : MonoBehaviour
 
         currentBoss = Instantiate(BossPreFab);
         Boss = currentBoss.transform.Find("Boss").gameObject;
+        Gun = currentBoss.transform.Find("gun").gameObject;
+        launcher = currentBoss.transform.Find("launcher").gameObject;
         //BossAnimator = currentBoss.GetComponent<Animator>();
         currentBoss.transform.position = spawnPos;
         if (side == 1)
         {
-            currentBoss.transform.rotation = Quaternion.Euler(0, 180, 0);
+            currentBoss.transform.Rotate(0, 180, 0);
         }
         isSpawn = true;
         yield return StartCoroutine(MoveTo(targetPos));
@@ -170,9 +200,19 @@ public class Stage2BossController : MonoBehaviour
             Destroy(currentWeakPoint);
             isWeakPointActive = false;
         }
-
+        yield return new WaitUntil(() => isMoving == false);
         Destroy(currentBoss);
         isOperating = false;
+    }
+
+    public void ChrSkill1(float duration)
+    {
+        if (duration > 0)
+        {
+            i = duration;
+            GameDamage = doubleDamage;
+            activeDamageInterval = SkilldamageInterval;
+        }
     }
 
     Vector3 GetSideSpawnPosition(int side)
@@ -222,6 +262,10 @@ public class Stage2BossController : MonoBehaviour
         {
             while (progress < 1)
             {
+                while (TimeManager.IsSkillPaused)
+                {
+                    yield return null;
+                }
                 progress += Time.deltaTime * moveSpeed;
                 currentBoss.transform.position = Vector3.Lerp(startPos, target, progress);
                 yield return null;
@@ -234,6 +278,10 @@ public class Stage2BossController : MonoBehaviour
             bool Spawnsoldier = false;
             while (progress < 1)
             {
+                while (TimeManager.IsSkillPaused)
+                {
+                    yield return null;
+                }
                 progress += Time.deltaTime * moveSpeed / 5;
                 currentBoss.transform.position = Vector3.Lerp(startPos, target, progress);
                 if (currentBoss.transform.position.x >= -0.1f && currentBoss.transform.position.x <= 0.1f && Spawnsoldier == false)
@@ -292,15 +340,23 @@ public class Stage2BossController : MonoBehaviour
         {
             if (currentBoss != null)
             {
+                GameObject Player1attack = Instantiate(Player1Attack, playerTransform.position, Quaternion.identity);
+                Vector3 direction = (currentBoss.transform.position - playerTransform.position).normalized;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                Player1attack.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
                 arc.clip = attack1;
                 arc.Play();
                 GameObject EffectClone = Instantiate(playerDamageEffect, currentBoss.transform);
                 EffectClone.transform.rotation = Quaternion.Euler(0, 0, EffectrandomZ);
-                Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
-                currentHealth += damage;
+                Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+                Gun.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+                launcher.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.3f);
+                currentHealth += GameDamage;
                 UpdateHealthDisplay();
                 yield return new WaitForSeconds(activeDamageInterval / 2);
-                Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
+                Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.6f);
+                Gun.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.6f);
+                launcher.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.6f);
                 if (currentHealth >= maxHealth)
                 {
                     StartCoroutine(DestroyBoss());
@@ -318,7 +374,7 @@ public class Stage2BossController : MonoBehaviour
         playerHealth.isInvincible = true;
         if (projectileManager != null)
         {
-            var manager = projectileManager.GetComponent<ProjectileManagerRandom>();
+            var manager = projectileManager.GetComponent<Stage2ProjectileManager>();
             if (manager != null)
             {
                 manager.CleanupProjectiles();
@@ -405,10 +461,111 @@ public class Stage2BossController : MonoBehaviour
         timeManager.LoadResultScene();
         yield return null;
     }
+
+    void TryAttackWeakPoint()
+    {
+        if (isWeakPointActive && currentWeakPoint != null)
+        {
+            float distance = Vector3.Distance(
+                playerTransform.position,
+                currentWeakPoint.transform.position
+            );
+
+            if (distance <= dashCheckDistance)
+            {
+                arc2.clip = attack2;
+                arc2.Play();
+                GameObject WeakPointEffect = Instantiate(BossDestroyPrefab);
+                WeakPointEffect.transform.position = currentWeakPoint.transform.position;
+                DealWeakPointDamage();
+                Destroy(currentWeakPoint);
+                isWeakPointActive = false;
+            }
+        }
+    }
+
+    IEnumerator WeakPointSpawnLoop()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(5f, 13f));
+            if (!isWeakPointActive && currentBoss != null)
+            {
+                SpawnClosestWeakPoint();
+            }
+        }
+    }
+
+    void SpawnClosestWeakPoint()
+    {
+        if (currentBoss == null) return;
+
+        Vector2 closestOffset = Vector2.zero;
+        float minDistance = Mathf.Infinity;
+
+        foreach (Vector2 offset in weakPointOffsets)
+        {
+            Vector3 worldPos = currentBoss.transform.position + new Vector3(offset.x, offset.y, 0);
+            float distance = Vector3.Distance(playerTransform.position, worldPos);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestOffset = offset;
+            }
+        }
+
+        currentWeakPoint = Instantiate(weakPointPrefab, currentBoss.transform);
+        currentWeakPoint.transform.localPosition = closestOffset;
+        isWeakPointActive = true;
+        StartCoroutine(RemoveWeakPointAfterDelay());
+    }
+
+    IEnumerator RemoveWeakPointAfterDelay()
+    {
+        yield return new WaitForSeconds(weakPointDuration);
+        if (currentWeakPoint != null)
+        {
+            Destroy(currentWeakPoint);
+            isWeakPointActive = false;
+        }
+    }
+
+    void DealWeakPointDamage()
+    {
+        currentHealth = Mathf.Clamp(currentHealth + weakPointDamage, 0, maxHealth);
+
+        UpdateHealthDisplay();
+
+        if (currentHealth >= maxHealth)
+        {
+            StartCoroutine(DestroyBoss());
+        }
+
+        // AudioManager.Instance.Play("WeakPointHit");
+    }
+
+    private void PauseBoss()
+    {
+        isPausedBySkill = true;
+        StopCoroutine(SpawnLoop());
+        moveSpeed = 0;
+    }
+
+    private void ResumeBoss()
+    {
+        isPausedBySkill = false;
+        moveSpeed = originSpeed;
+        StartCoroutine(SpawnLoop());
+    }
+
     void Update()
     {
         float percentage = (currentHealth * 100 / maxHealth);
         healthText.SetText($"{Mathf.RoundToInt(percentage)} %");
+        if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetButtonDown("Weakpoint"))
+        {
+            TryAttackWeakPoint();
+        }
 
         if (i > 0)
         {
@@ -417,8 +574,36 @@ public class Stage2BossController : MonoBehaviour
 
         if (i <= 0)
         {
-            damage = originalDamage;
+            GameDamage = originalDamage;
             activeDamageInterval = originDamageInterval;
+        }
+
+        if (!phase2Triggered && currentHealth >= maxHealth * 0.5f)
+        {
+            phase2Triggered = true;
+            isPhase2 = true;
+
+            if (projectileManager != null)
+            {
+                var manager = projectileManager.GetComponent<Stage2ProjectileManager>();
+                if (manager != null)
+                {
+                    manager.ActivatePhase2();
+                }
+            }
+        }
+
+        if (TimeManager.IsSkillPaused)
+        {
+            if (!isPausedBySkill)
+            {
+                PauseBoss();
+            }
+            return;
+        }
+        else if (isPausedBySkill)
+        {
+            ResumeBoss();
         }
 
         randomx = Random.Range(-3, 3);

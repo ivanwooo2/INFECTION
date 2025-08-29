@@ -17,9 +17,14 @@ public class TimeManager : MonoBehaviour
     private PlayerHealth playerHealth;
     public bool isTutorial = false;
 
+    public static bool IsSkillPaused { get; private set; } = false;
+    private static float pauseEndTime = 0f;
+    private static float pauseDuration = 0f;
+
     public float CurrentTime => currentTime;
     public static float LastRemainingTime { get; private set; }
     public static float LastTotalTime { get; private set; }
+
 
     private void Awake()
     {
@@ -35,10 +40,28 @@ public class TimeManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         currentTime = totalTime;
+        Time.timeScale = 1f;
     }
 
     private void Update()
     {
+        if (IsSkillPaused && Time.realtimeSinceStartup >= pauseEndTime)
+        {
+            IsSkillPaused = false;
+            var projectileManager = FindObjectOfType<ProjectileManagerRandom>();
+            if (projectileManager != null)
+            {
+                projectileManager.SkillCleanupProjectiles();
+            }
+            var stage2projectileManager = FindObjectOfType<Stage2ProjectileManager>();
+            if (stage2projectileManager != null)
+            {
+                stage2projectileManager.SkillCleanupProjectiles();
+            }
+        }
+
+        if (IsSkillPaused) return;
+
         if (!isGameOver && SceneManager.GetActiveScene().name != "ResultScene" && isTutorial == false)
         {
             currentTime -= Time.deltaTime;
@@ -71,6 +94,11 @@ public class TimeManager : MonoBehaviour
         {
             projectileManager.CleanupProjectiles();
         }
+        var stage2projectileManager = FindObjectOfType<Stage2ProjectileManager>();
+        if (stage2projectileManager != null)
+        {
+            stage2projectileManager.CleanupProjectiles();
+        }
 
         BossController bossController = FindObjectOfType<BossController>();
         if (bossController != null && bossController.IsBossDead)
@@ -91,6 +119,13 @@ public class TimeManager : MonoBehaviour
         {
             SceneManager.LoadScene("GameOverScene");
         }
+    }
+
+    public static void TriggerSkillPause(float duration)
+    {
+        IsSkillPaused = true;
+        pauseDuration = duration;
+        pauseEndTime = Time.realtimeSinceStartup + duration;
     }
 
     public void ResetTimer()

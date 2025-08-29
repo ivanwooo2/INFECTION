@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1239060225459114654}
   - component: {fileID: 5765427187889133874}
   - component: {fileID: -8372111472783195543}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fire
-  m_TagString: Untagged
+  m_TagString: EnemyProjectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4848,7 +4848,7 @@ CircleCollider2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_LayerOverridePriority: 0
+  m_LayerOverridePriority: 1
   m_ForceSendLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -4879,5 +4879,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 942bc8caccf248a40b1ee56abe88e8d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LifeTime: 5
-  damage: 5
+  LifeTime: 3
+  damage: 6

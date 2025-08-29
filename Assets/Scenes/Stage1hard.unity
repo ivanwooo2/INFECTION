@@ -3745,8 +3745,12 @@ MonoBehaviour:
   playerSkillmoveSpeed: 10
   originalMoveSpeed: 0
   playerRB: {fileID: 1443496793}
-  origin: {fileID: 21300000, guid: 607e6bf205c41e04f9cdc219ff2cf768, type: 3}
-  Skill: {fileID: 21300000, guid: 27152b22dc85b8b4f9f8c00053c8fdb7, type: 3}
+  origin1: {fileID: 21300000, guid: 607e6bf205c41e04f9cdc219ff2cf768, type: 3}
+  origin2: {fileID: 21300000, guid: c9a441882ec44da49a32aeaafb6fbdf2, type: 3}
+  Skill1: {fileID: 21300000, guid: 27152b22dc85b8b4f9f8c00053c8fdb7, type: 3}
+  Skill2: {fileID: 21300000, guid: c9a441882ec44da49a32aeaafb6fbdf2, type: 3}
+  PlayerSkin1: {fileID: 21300000, guid: 607e6bf205c41e04f9cdc219ff2cf768, type: 3}
+  PlayerSkin2: {fileID: 21300000, guid: c9a441882ec44da49a32aeaafb6fbdf2, type: 3}
   activeMoveSpeed: 0
   dashSpeed: 13
   dashLength: 0.65
@@ -3757,15 +3761,19 @@ MonoBehaviour:
   skillCooldownText: {fileID: 1389968531}
   SkillusingImage: {fileID: 1325474901}
   SkillCooldownBG: {fileID: 644102860}
-  skillDuration: 6
-  skillCooldown: 10
+  skill2FreezeDuration: 6
+  skill2Cooldown: 30
+  skill1Duration: 5
+  skill1Cooldown: 10
   scaleMultiplier: 0.5
+  isSkilling: 0
   playerTR: {fileID: 1443496790}
   Player: {fileID: 1443496796}
   dash: {fileID: 8300000, guid: 67ce9de984a15464383835a7707394e0, type: 3}
   skill1: {fileID: 8300000, guid: ab83fa5693a60bb43a41016bc221b06e, type: 3}
   skill2: {fileID: 8300000, guid: 0aecabca1f320594189bdb47ed32fa4e, type: 3}
   isInvincible: 0
+  PlayerIndex: 0
 --- !u!50 &1443496793
 Rigidbody2D:
   serializedVersion: 4
@@ -4811,7 +4819,9 @@ MonoBehaviour:
   healthCanvas: {fileID: 2134831041}
   maxHealth: 1500
   currentHealth: 0
-  damage: 3.5
+  GameDamage: 0
+  Player1damage: 3.5
+  Player2damage: 3.5
   damageMult: 1.5
   damageInterval: 0.5
   SkilldamageInterval: 0.3
@@ -6498,7 +6508,7 @@ MonoBehaviour:
   warningProjectilePrefab: {fileID: 5168236472738056646, guid: 2225c63c21565aa40b5109a1402ec978, type: 3}
   expandCirclePrefab: {fileID: 6658452603097509866, guid: 82ab18cd7f0ed014e884ba37970a7824, type: 3}
   patterns:
-  - name: "\u6295\u77F3\u6A5F"
+  - name: Trebuchet
     cooldown: 1.2
     weight: 9
     lockOnLaserPrefab: {fileID: 0}
@@ -6508,7 +6518,7 @@ MonoBehaviour:
     phase1Duration: 5
     phase2Duration: 1
     isReady: 1
-  - name: "\u82E6\u7121"
+  - name: Kunai
     cooldown: 3.5
     weight: 40
     lockOnLaserPrefab: {fileID: 0}
@@ -6518,7 +6528,7 @@ MonoBehaviour:
     phase1Duration: 5
     phase2Duration: 1
     isReady: 1
-  - name: "\u7BAD"
+  - name: arrow
     cooldown: 1
     weight: 26
     lockOnLaserPrefab: {fileID: 0}
@@ -6528,7 +6538,7 @@ MonoBehaviour:
     phase1Duration: 5
     phase2Duration: 1
     isReady: 1
-  - name: "\u5F29\u7BAD"
+  - name: Crossbow
     cooldown: 1
     weight: 11
     lockOnLaserPrefab: {fileID: 9119279951547032459, guid: 3c0396f11dd67fb4ca21199fdc35caeb, type: 3}
@@ -6543,7 +6553,7 @@ MonoBehaviour:
     phase1Duration: 5
     phase2Duration: 1
     isReady: 1
-  - name: "\u528D"
+  - name: sword
     cooldown: 3
     weight: 13
     lockOnLaserPrefab: {fileID: 0}

@@ -5,33 +5,33 @@ using UnityEngine;
 
 public class TutorialCheckerTextBoxManager : MonoBehaviour
 {
-    private TutorialCheckManager TutorialCheckManager;
+    private TutorialCheckManager tutorialCheckManager;
     private TMP_Text TutorialCheck;
     void Start()
     {
-        TutorialCheckManager = FindObjectOfType<TutorialCheckManager>();
+        tutorialCheckManager = FindObjectOfType<TutorialCheckManager>();
         TutorialCheck = GetComponent<TMP_Text>();
     }
 
     public void Switch()
     {
-        if (TutorialCheckManager.TutorialDone == true)
+        if (tutorialCheckManager.TutorialDone == true)
         {
-            TutorialCheckManager.TutorialDone = false;
+            tutorialCheckManager.TutorialDone = false;
         }
-        else if (TutorialCheckManager.TutorialDone == false)
+        else if (tutorialCheckManager.TutorialDone == false)
         {
-            TutorialCheckManager.TutorialDone = true;
+            tutorialCheckManager.TutorialDone = true;
         }
     }
 
     void Update()
     {
-        if (TutorialCheckManager.TutorialDone == true)
+        if (tutorialCheckManager.TutorialDone == true)
         {
             TutorialCheck.text = "Tutorial Status:Done";
         }
-        else if (TutorialCheckManager.TutorialDone == false)
+        else if (tutorialCheckManager.TutorialDone == false)
         {
             TutorialCheck.text = "Tutorial Status:unDone";
         }

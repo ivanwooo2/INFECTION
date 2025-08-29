@@ -27,12 +27,16 @@ public class AimMissile : MonoBehaviour
         float aimTime = 0;
         while (aimTime < phaseDuration)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             aimTime += Time.deltaTime;
             direction = (Player.transform.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0, 0, angle - 45);
             transform.position += direction * moveSpeed * 1f * Time.deltaTime;
-            if (Vector2.Distance(transform.position,Player.transform.position) <= 0.3f )
+            if (Vector2.Distance(transform.position,Player.transform.position) <= 0.4f )
             {
                 GameObject Boom = Instantiate(explore, transform.position, Quaternion.identity);
                 yield return new WaitForSeconds(0.1f);

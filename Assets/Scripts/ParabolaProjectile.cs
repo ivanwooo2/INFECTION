@@ -36,7 +36,6 @@ public class ParabolaProjectile : MonoBehaviour
         duration = travelTime;
         parentCircle = circle;
 
-        StartCoroutine(EnableDamageOnArrival());
 
         if (playerObj != null)
         {
@@ -47,6 +46,10 @@ public class ParabolaProjectile : MonoBehaviour
 
     void Update()
     {
+        if (TimeManager.IsSkillPaused)
+        {
+            return;
+        }
         if (timer > duration) return;
         _transform.Rotate(rotation * Time.deltaTime);
         timer += Time.deltaTime;
@@ -66,16 +69,10 @@ public class ParabolaProjectile : MonoBehaviour
             {
                 parentCircle.SpawnChildCircles(targetPosition);
             }
-
+            canDamage = true;
+            GetComponent<Collider2D>().enabled = true;
             Destroy(gameObject, 0.1f);
         }
-    }
-
-    IEnumerator EnableDamageOnArrival()
-    {
-        yield return new WaitForSeconds(duration - 0.1f);
-        canDamage = true;
-        GetComponent<Collider2D>().enabled = true;
     }
 
     void OnTriggerEnter2D(Collider2D other)

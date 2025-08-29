@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class TutorialCheckManager : MonoBehaviour
 {
@@ -22,6 +23,13 @@ public class TutorialCheckManager : MonoBehaviour
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.T) && TutorialDone == false)
+        {
+            TutorialDone = true;
+        }
+        else if (Input.GetKeyDown(KeyCode.T) && TutorialDone == true)
+        {
+            TutorialDone = false;
+        }
     }
 }

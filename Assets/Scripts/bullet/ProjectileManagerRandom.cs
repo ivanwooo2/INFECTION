@@ -38,6 +38,8 @@ public class ProjectileManagerRandom : MonoBehaviour
     private List<GameObject> activeProjectiles = new List<GameObject>();
     private bool isStopped = false;
 
+    private bool wasPaused = false;
+
     void Start()
     {
         StartCoroutine(AttackScheduler());
@@ -45,7 +47,51 @@ public class ProjectileManagerRandom : MonoBehaviour
 
     void Update()
     {
+        if (TimeManager.IsSkillPaused)
+        {
+            if (!wasPaused)
+            {
+                PauseAllProjectiles();
+                wasPaused = true;
+            }
+            return;
+        }
+        else if (wasPaused)
+        {
+            ResumeAllProjectiles();
+            wasPaused = false;
+        }
         activeProjectiles.RemoveAll(item => item == null);
+    }
+
+    private void PauseAllProjectiles()
+    {
+        foreach (var proj in activeProjectiles)
+        {
+            if (proj != null)
+            {
+                var rb = proj.GetComponent<Rigidbody2D>();
+                if (rb != null) rb.simulated = false;
+
+                var moveScript = proj.GetComponent<MonoBehaviour>();
+                if (moveScript != null) moveScript.enabled = false;
+            }
+        }
+    }
+
+    private void ResumeAllProjectiles()
+    {
+        foreach (var proj in activeProjectiles)
+        {
+            if (proj != null)
+            {
+                var rb = proj.GetComponent<Rigidbody2D>();
+                if (rb != null) rb.simulated = true;
+
+                var moveScript = proj.GetComponent<MonoBehaviour>();
+                if (moveScript != null) moveScript.enabled = true;
+            }
+        }
     }
 
     public void CleanupProjectiles()
@@ -70,6 +116,24 @@ public class ProjectileManagerRandom : MonoBehaviour
         isStopped = true;
     }
 
+    public void SkillCleanupProjectiles()
+    {
+        var projectiles = GameObject.FindGameObjectsWithTag("EnemyProjectile");
+        foreach (var proj in projectiles)
+        {
+            Destroy(proj);
+        }
+
+        foreach (var proj in activeProjectiles)
+        {
+            if (proj != null)
+            {
+                Destroy(proj);
+            }
+        }
+        activeProjectiles.Clear();
+    }
+
     public void RegisterFragment(GameObject fragment)
     {
         if (!activeProjectiles.Contains(fragment))
@@ -85,6 +149,10 @@ public class ProjectileManagerRandom : MonoBehaviour
         {
             while (true)
             {
+                while (TimeManager.IsSkillPaused)
+                {
+                    yield return null;
+                }
                 yield return new WaitUntil(() => !isGlobalCooldown);
                 UpdateAvailablePatterns();
 
@@ -137,23 +205,23 @@ public class ProjectileManagerRandom : MonoBehaviour
     IEnumerator ExecuteAttack(AttackPattern pattern)
     {
         pattern.isReady = false;
-        Debug.Log($"觸發攻擊: {pattern.name}");
+        Debug.Log($"AttackStart: {pattern.name}");
 
         switch (pattern.name)
         {
-            case "投石機":
+            case "Trebuchet":
                 yield return StartCoroutine(Pattern1Logic());
                 break;
-            case "苦無":
+            case "Kunai":
                 yield return StartCoroutine(Pattern2Logic());
                 break;
-            case "箭":
+            case "arrow":
                 yield return StartCoroutine(Pattern3Logic());
                 break;
-            case "劍":
+            case "sword":
                 yield return StartCoroutine(Pattern4Logic(pattern));
                 break;
-            case "弩箭":
+            case "Crossbow":
                 yield return StartCoroutine(LockOnAttackLogic(pattern));
                 break;
         }
@@ -268,6 +336,10 @@ public class ProjectileManagerRandom : MonoBehaviour
 
         while (timer < pattern.phase1Duration)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             if (Mathf.FloorToInt(timer) != Mathf.FloorToInt(timer - Time.deltaTime))
             {
                 Vector2 toCenter = ((Vector2)cam.transform.position - (Vector2)projectile.transform.position).normalized;
@@ -307,6 +379,10 @@ public class ProjectileManagerRandom : MonoBehaviour
             float chaseTimer = 0;
             while (chaseTimer < pattern.phase2Duration)
             {
+                while (TimeManager.IsSkillPaused)
+                {
+                    yield return null;
+                }
                 projectile.transform.position += (Vector3)targetDir * pattern.directionChangeSpeed * 1.5f * Time.deltaTime;
 
                 float chaseAngle = Mathf.Atan2(targetDir.y, targetDir.x) * Mathf.Rad2Deg;

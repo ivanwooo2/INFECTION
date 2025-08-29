@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: CharacterData2
   m_EditorClassIdentifier: 
   characterName: 
-  description: 
-  isUnlocked: 0
+  Skilldescription: 
+  CRdescription: 
+  isUnlocked: 1
   lockedSprite: {fileID: 21300000, guid: e855456524fde2d4bb4400e9d5b8dfa0, type: 3}
-  unlockedSprite: {fileID: 21300000, guid: 607e6bf205c41e04f9cdc219ff2cf768, type: 3}
+  unlockedSprite: {fileID: 21300000, guid: c9a441882ec44da49a32aeaafb6fbdf2, type: 3}
   backGround: {fileID: 21300000, guid: 3773deef187e49643b47f35dc28ac872, type: 3}
   SkillIcon: {fileID: 21300000, guid: e855456524fde2d4bb4400e9d5b8dfa0, type: 3}

@@ -41,6 +41,10 @@ public class Sniper : MonoBehaviour
         GameObject sniperaim = Instantiate(SniperAim,targetPositions,Quaternion.identity);
         while (timer < trackingDuration)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             UpdateLaserPositions();
             sniperaim.transform.position = targetPositions;
             timer += Time.deltaTime;
@@ -55,11 +59,19 @@ public class Sniper : MonoBehaviour
     }
     void UpdateLaserPositions()
     {
+        if (TimeManager.IsSkillPaused)
+        {
+            return;
+        }
         Vector3 currentPosition = Player.transform.position;
         LastPlayerposition = currentPosition;
 
         if (useTrackingDelay)
         {
+            if (TimeManager.IsSkillPaused)
+            {
+                return;
+            }
             targetPositions = Vector3.Lerp(
                 targetPositions,
                 currentPosition,

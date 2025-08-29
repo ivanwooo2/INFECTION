@@ -17,6 +17,7 @@ public class LockOnLaser : MonoBehaviour
 
     [Header("材質設定")]
     public Material laserMaterial;
+    public Material PauselaserMaterial;
 
     private Transform[] spawnPoints;
     private Transform player;
@@ -79,11 +80,16 @@ public class LockOnLaser : MonoBehaviour
                     Debug.LogWarning("未找到 LaserMaterial，使用默認材質");
                 }
             }
-
             laserLines.Add(lr);
+
         }
 
         StartCoroutine(LockOnRoutine());
+    }
+
+    void Update()
+    {
+        
     }
 
     IEnumerator LockOnRoutine()
@@ -93,6 +99,14 @@ public class LockOnLaser : MonoBehaviour
         float timer = 0;
         while (timer < trackingDuration)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                foreach (LineRenderer lr in laserLines)
+                {
+                    lr.material = PauselaserMaterial;
+                }
+                yield return null;
+            }
             UpdateLaserPositions();
             timer += Time.deltaTime;
             yield return null;
@@ -116,12 +130,20 @@ public class LockOnLaser : MonoBehaviour
 
         for (int i = 0; i < lineCount; i++)
         {
+            if (TimeManager.IsSkillPaused)
+            {
+                return;
+            }
             if (laserLines[i] == null || spawnPoints[i] == null) continue;
 
             Vector3 currentPosition = player.position;
             LastPlayerposition = currentPosition;
             if (useTrackingDelay)
             {
+                if (TimeManager.IsSkillPaused)
+                {
+                    return;
+                }
                 targetPositions[i] = Vector3.Lerp(
                     targetPositions[i],
                     currentPosition,

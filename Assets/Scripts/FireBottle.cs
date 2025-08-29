@@ -25,6 +25,7 @@ public class FireBottle : MonoBehaviour
         stone = SoundEffect.GetComponent<AudioSource>();
         stone.clip = sfx1;
         stone.Play();
+
     }
     public void Initialize(Vector3 target, float travelTime)
     {
@@ -32,13 +33,16 @@ public class FireBottle : MonoBehaviour
         targetPosition = target;
         duration = travelTime;
 
-        StartCoroutine(EnableDamageOnArrival());
     }
 
     void Update()
     {
-        if (timer > duration) return;
+        if (TimeManager.IsSkillPaused)
+        {
+            return;
+        }
         _transform.Rotate(rotation * Time.deltaTime);
+        if (timer > duration) return;
         timer += Time.deltaTime;
         float normalizedTime = timer / duration;
 
@@ -51,16 +55,8 @@ public class FireBottle : MonoBehaviour
             stone.clip = sfx2;
             stone.Play();
             transform.position = targetPosition;
-
-            Destroy(gameObject, 0.1f);
+            GameObject FireEffect = Instantiate(Fire, transform.position, Quaternion.identity);
+            Destroy(gameObject, 0.02f);
         }
-    }
-
-    IEnumerator EnableDamageOnArrival()
-    {
-        yield return new WaitForSeconds(duration);
-        GameObject FireEffect = Instantiate(Fire,transform.position,Quaternion.identity);
-        yield return new WaitForSeconds(0.1f);
-        Destroy(gameObject);
     }
 }

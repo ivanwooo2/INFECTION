@@ -13,7 +13,8 @@ public class LevelSelevtion : MonoBehaviour
     [SerializeField] Animator transition;
     [SerializeField] float transitionTime = 1f;
 
-    private int selectedIndex = -1;
+    private int selectedLevelIndex = -1;
+    private int selecteddiffculyIndex = -1;
     private bool isLevelSelected = false;
 
     [SerializeField] private AudioSource AudioSource;
@@ -79,16 +80,16 @@ public class LevelSelevtion : MonoBehaviour
                 "LOCKED";
         }
 
-        if (selectedIndex >= 0 && selectedIndex < levelButtons.Length)
+        if (selectedLevelIndex >= 0 && selectedLevelIndex < levelButtons.Length)
         {
-            levelButtons[selectedIndex].GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
-            levelBackGround[selectedIndex].GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+            levelButtons[selectedLevelIndex].GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
+            levelBackGround[selectedLevelIndex].GetComponent<Image>().color = new Color(1f, 1f, 1f, 0.5f);
         }
         AudioSource.clip = confiem;
         AudioSource.Play();
         levelButtons[levelIndex].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
         levelBackGround[levelIndex].GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
-        selectedIndex = levelIndex;
+        selectedLevelIndex = levelIndex;
 
         bool isUnlocked = levelDatas[levelIndex].isUnlocked;
         isLevelSelected = isUnlocked;
@@ -104,7 +105,7 @@ public class LevelSelevtion : MonoBehaviour
 
     public void NextStageScene()
     {
-        if (isLevelSelected && selectedIndex >= 0)
+        if (isLevelSelected && selectedLevelIndex >= 0)
         {
             SelectionSceneBGMManager BGMmanager = FindObjectOfType<SelectionSceneBGMManager>();
             if (BGMmanager != null)
@@ -113,18 +114,30 @@ public class LevelSelevtion : MonoBehaviour
             }
             AudioSource.clip = confiem;
             AudioSource.Play();
-            selectedIndex = PlayerPrefs.GetInt("SelectedLevelIndex");
-            if (selectedIndex == 0)
+            selecteddiffculyIndex = PlayerPrefs.GetInt("SelectedLevelIndex");
+            if (selectedLevelIndex == 0 && selecteddiffculyIndex == 0)
             {
                 StartCoroutine(GoNormal());
             }
-            else if (selectedIndex == 1)
+            else if (selectedLevelIndex == 0 && selecteddiffculyIndex == 1)
             {
                 StartCoroutine(GoHard());
             }
-            else if (selectedIndex == 2)
+            else if (selectedLevelIndex == 0 && selecteddiffculyIndex == 2)
             {
                 StartCoroutine(GoInsane());
+            }
+            else if (selectedLevelIndex == 1 && selecteddiffculyIndex == 0)
+            {
+                StartCoroutine(GoStage2Normal());
+            }
+            else if (selectedLevelIndex == 1 && selecteddiffculyIndex == 1)
+            {
+                StartCoroutine(GoStage2Hard());
+            }
+            else if (selectedLevelIndex == 1 && selecteddiffculyIndex == 2)
+            {
+                StartCoroutine(GoStage2Inanse());
             }
         }
     }
@@ -163,6 +176,27 @@ public class LevelSelevtion : MonoBehaviour
         transition.SetBool("Start", true);
         yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene("Stage1Inanse");
+    }
+
+    IEnumerator GoStage2Normal()
+    {
+        transition.SetBool("Start", true);
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("Stage2normal");
+    }
+
+    IEnumerator GoStage2Hard()
+    {
+        transition.SetBool("Start", true);
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("Stage2hard");
+    }
+
+    IEnumerator GoStage2Inanse()
+    {
+        transition.SetBool("Start", true);
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene("Stage2Inanse");
     }
 
     void Update()

@@ -11,8 +11,10 @@ public class Player1AttackManager : MonoBehaviour
     private PlayerMovement PlayerMovement;
     [SerializeField] private Sprite NormalAttack;
     [SerializeField] private Sprite SkillAttack;
+    private int PlayerIndex;
     void Start()
     {
+        PlayerIndex = PlayerPrefs.GetInt("SelectedCharacterIndex");
         SpriteRenderer = GetComponent<SpriteRenderer>();
         BossController = FindAnyObjectByType<BossController>();
         PlayerMovement = FindAnyObjectByType<PlayerMovement>();
@@ -23,7 +25,7 @@ public class Player1AttackManager : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, angle - 90);
         }
 
-        if (PlayerMovement.isSkilling == true)
+        if (PlayerMovement.isSkilling == true && PlayerIndex == 0)
         {
             SpriteRenderer.sprite = SkillAttack;
         }

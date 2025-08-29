@@ -121,7 +121,6 @@ public class CharacterSelectionManager : MonoBehaviour
         {
             AudioSource.clip = confiem;
             AudioSource.Play();
-            // 保存選擇的角色（使用PlayerPrefs）
             PlayerPrefs.SetInt("SelectedCharacterIndex", selectedIndex);
             PlayerPrefs.SetString("SelectedCharacterName", characterDatas[selectedIndex].characterName);
             PlayerPrefs.Save();

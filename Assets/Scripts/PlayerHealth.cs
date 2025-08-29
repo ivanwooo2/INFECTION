@@ -17,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private GameObject PlayerDamageBackGround;
     [SerializeField] private GameObject playerDamageEffect;
     [SerializeField] private GameObject projectileManager;
+    [SerializeField] private GameObject Stage2projectileManager;
     [SerializeField] Animator transition;
     [SerializeField] float transitionTime = 1f;
     [SerializeField] GameObject PlayerDestroyEffect;
@@ -120,6 +121,14 @@ public class PlayerHealth : MonoBehaviour
         if (projectileManager != null)
         {
             var manager = projectileManager.GetComponent<ProjectileManagerRandom>();
+            if (manager != null)
+            {
+                manager.CleanupProjectiles();
+            }
+        }
+        if (Stage2projectileManager != null)
+        {
+            var manager = Stage2projectileManager.GetComponent<Stage2ProjectileManager>();
             if (manager != null)
             {
                 manager.CleanupProjectiles();

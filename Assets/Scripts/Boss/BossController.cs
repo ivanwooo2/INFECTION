@@ -11,7 +11,7 @@ public class BossController : MonoBehaviour
 
     [SerializeField] private GameObject playerDamageEffect;
 
-    private TimeManager TimeManager;
+    private TimeManager GameManager;
     [SerializeField] public GameObject BossPreFab;
     private Animator BossAnimator;
     private GameObject Boss;
@@ -20,6 +20,7 @@ public class BossController : MonoBehaviour
     [SerializeField] public float minInterval;
     [SerializeField] public float maxInterval;
     [SerializeField] public float moveSpeed;
+    private float originSpeed;
     [SerializeField] public float stayDuration;
 
     [SerializeField] public Vector2 initialSpawnViewport;
@@ -33,7 +34,9 @@ public class BossController : MonoBehaviour
     [SerializeField] private float maxHealth = 300;
     [SerializeField] private float currentHealth;
     private bool isPlayerInDamageArea;
-    [SerializeField] public float damage;
+    [SerializeField] public float GameDamage;
+    [SerializeField] public float Player1damage;
+    [SerializeField] public float Player2damage;
     private float originalDamage;
     private float doubleDamage;
     [SerializeField] private float damageMult;
@@ -58,6 +61,7 @@ public class BossController : MonoBehaviour
     private Transform playerTransform;
     public AudioSource arc,arc2;
     public AudioClip attack1,attack2,DestroySE;
+    private int PlayerIndex;
 
     public GameObject currentBoss;
 
@@ -75,15 +79,29 @@ public class BossController : MonoBehaviour
     private bool isPhase2 = false;
     private bool phase2Triggered = false;
     public bool IsBossDead { get; private set; } = false;
+
+    private bool isPausedBySkill = false;
+    private bool isMoving;
     void Start()
     {
+        PlayerIndex = PlayerPrefs.GetInt("SelectedCharacterIndex");
+        originSpeed = moveSpeed;
         transition = Crossfade.GetComponent<Animator>();
         transition.SetBool("Start", false);
         originDamageInterval = damageInterval;
         activeDamageInterval = originDamageInterval;
-        TimeManager = GetComponent<TimeManager>();
-        originalDamage = damage;
-        doubleDamage = damage * damageMult;
+        GameManager = GetComponent<TimeManager>();
+        if (PlayerIndex == 0)
+        {
+            GameDamage = Player1damage;
+            originalDamage = Player1damage;
+            doubleDamage = Player1damage * damageMult;
+        }
+        else if (PlayerIndex == 1)
+        {
+            originalDamage = Player2damage;
+            GameDamage = Player2damage;
+        }
         timeManager = TimeManager.Instance;
         InitializeHealthSystem();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
@@ -122,7 +140,7 @@ public class BossController : MonoBehaviour
             Destroy(currentWeakPoint);
             isWeakPointActive = false;
         }
-
+        yield return new WaitUntil(() => isMoving == false);
         Destroy(currentBoss);
         isOperating = false;
         StartCoroutine(RandomSpawnLoop());
@@ -132,6 +150,10 @@ public class BossController : MonoBehaviour
     {
         while (true)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             yield return new WaitForSeconds(Random.Range(minInterval, maxInterval));
             if (!isOperating) StartCoroutine(SpawnFromRandomSide());
         }
@@ -163,7 +185,7 @@ public class BossController : MonoBehaviour
             Destroy(currentWeakPoint);
             isWeakPointActive = false;
         }
-
+        yield return new WaitUntil(() => isMoving == false);
         Destroy(currentBoss);
         isOperating = false;
     }
@@ -176,15 +198,21 @@ public class BossController : MonoBehaviour
         }
         else
         {
+            isMoving = true;
             Vector3 startPos = currentBoss.transform.position;
             float progress = 0;
 
             while (progress < 1)
             {
+                while (TimeManager.IsSkillPaused)
+                {
+                    yield return null;
+                }
                 progress += Time.deltaTime * moveSpeed;
                 currentBoss.transform.position = Vector3.Lerp(startPos, target, progress);
                 yield return null;
             }
+            isMoving = false;
         }
     }
 
@@ -367,7 +395,7 @@ public class BossController : MonoBehaviour
                 GameObject EffectClone = Instantiate(playerDamageEffect,currentBoss.transform);
                 EffectClone.transform.rotation = Quaternion.Euler(0, 0, EffectrandomZ);
                 Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
-                currentHealth += damage;
+                currentHealth += GameDamage;
                 UpdateHealthDisplay();
                 yield return new WaitForSeconds(activeDamageInterval / 2);
                 Boss.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
@@ -447,7 +475,7 @@ public class BossController : MonoBehaviour
         if (duration > 0)
         {
             i = duration;
-            damage = doubleDamage;
+            GameDamage = doubleDamage;
             activeDamageInterval = SkilldamageInterval;
         }
     }
@@ -474,6 +502,20 @@ public class BossController : MonoBehaviour
         }
     }
 
+    private void PauseBoss()
+    {
+        isPausedBySkill = true;
+        StopCoroutine(RandomSpawnLoop());
+        moveSpeed = 0;
+    }
+
+    private void ResumeBoss()
+    {
+        isPausedBySkill = false;
+        moveSpeed = originSpeed;
+        StartCoroutine(RandomSpawnLoop());
+    }
+
 
     void Update()
     {
@@ -492,7 +534,7 @@ public class BossController : MonoBehaviour
 
         if (i <= 0)
         {
-            damage = originalDamage;
+            GameDamage = originalDamage;
             activeDamageInterval = originDamageInterval;
         }
 
@@ -518,6 +560,19 @@ public class BossController : MonoBehaviour
                     manager.ActivatePhase2();
                 }
             }
+        }
+
+        if (TimeManager.IsSkillPaused)
+        {
+            if (!isPausedBySkill)
+            {
+                PauseBoss();
+            }
+            return;
+        }
+        else if (isPausedBySkill)
+        {
+            ResumeBoss();
         }
     }
 

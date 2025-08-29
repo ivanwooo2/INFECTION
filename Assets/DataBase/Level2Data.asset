@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level2Data
   m_EditorClassIdentifier: 
   StageName: STAGE 2
-  isUnlocked: 0
+  isUnlocked: 1
   lockedSprite: {fileID: 21300000, guid: e855456524fde2d4bb4400e9d5b8dfa0, type: 3}
-  unlockedSprite: {fileID: 21300000, guid: e6657b36f2d899a47ab1900b3616c9d2, type: 3}
+  unlockedSprite: {fileID: 21300000, guid: 24c668aa60dbbcc438b5d246038ae930, type: 3}
   BackGround: {fileID: 21300000, guid: 0bf69b587f969bf469a140aada396a15, type: 3}

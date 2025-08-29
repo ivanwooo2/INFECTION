@@ -15,6 +15,7 @@ public class WarningProjectileController : MonoBehaviour
     [SerializeField] private float projectileSpacing = 1f;
 
     [SerializeField] private float projectileSpeed = 20f;
+    [SerializeField] private float originprojectileSpeed;
     [SerializeField] private float aliveTime = 3f;
     [SerializeField] private int damage = 1;
 
@@ -33,8 +34,12 @@ public class WarningProjectileController : MonoBehaviour
     private Rigidbody2D[] projectileRigidbodies;
     private Vector3[] initialScales;
 
+    private Vector2 GoingDir;
+    private bool isGoing;
+
     void Awake()
     {
+        originprojectileSpeed = projectileSpeed;
         warningRenderer = warningIndicator.GetComponent<SpriteRenderer>();
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
@@ -135,6 +140,10 @@ public class WarningProjectileController : MonoBehaviour
 
         for (int i = 0; i < flashCount; i++)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             warningRenderer.color = flashColor;
             yield return new WaitForSeconds(flashInterval);
             warningRenderer.color = new Color(0, 0, 0, 0);
@@ -155,7 +164,6 @@ public class WarningProjectileController : MonoBehaviour
         }
 
         LaunchProjectile();
-        Destroy(gameObject, aliveTime);
     }
 
     IEnumerator ScaleAllWarningReds(float duration)
@@ -164,6 +172,10 @@ public class WarningProjectileController : MonoBehaviour
 
         while (elapsedTime < duration)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             float progress = elapsedTime / duration;
 
             float easedProgress = Mathf.SmoothStep(0f, 1f, progress);
@@ -201,6 +213,7 @@ public class WarningProjectileController : MonoBehaviour
     void LaunchProjectile()
     {
         Vector2 direction = GetLaunchDirection();
+        GoingDir = direction;
         bow.clip = sfx2;
         bow.Play();
 
@@ -221,7 +234,7 @@ public class WarningProjectileController : MonoBehaviour
 
             if (projectileRigidbodies[i] != null)
             {
-                projectileRigidbodies[i].velocity = direction * projectileSpeed;
+                StartCoroutine(Fire(i));
             }
         }
     }
@@ -275,5 +288,25 @@ public class WarningProjectileController : MonoBehaviour
             other.GetComponent<PlayerHealth>().TakeDamage(damage);
             Destroy(gameObject);
         }
+    }
+
+    IEnumerator Fire(int number)
+    {
+        while (true)
+        {
+            while (TimeManager.IsSkillPaused)
+            {
+                projectileRigidbodies[number].velocity = GoingDir * 0;
+                yield return null;
+            }
+            if (isGoing) yield return null;
+            isGoing = true;
+            projectileRigidbodies[number].velocity = GoingDir * projectileSpeed;
+        }
+    }
+
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

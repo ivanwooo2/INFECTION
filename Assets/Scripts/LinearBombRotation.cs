@@ -14,6 +14,10 @@ public class LinearBombRotation : LinearBomber
 
     void Update()
     {
-            _transform.Rotate(rotation * Time.deltaTime);
+        if (TimeManager.IsSkillPaused)
+        {
+            return;
+        }
+        _transform.Rotate(rotation * Time.deltaTime);
     }
 }

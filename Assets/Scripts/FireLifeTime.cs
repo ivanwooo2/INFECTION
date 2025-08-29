@@ -8,16 +8,22 @@ public class FireLifeTime : MonoBehaviour
     [SerializeField] private int damage;
     private PlayerHealth playerHealth;
     private PlayerMovement playerMovement;
+    private ParticleSystem _particleSystem;
     void Start()
     {
         playerHealth = FindAnyObjectByType<PlayerHealth>();
         playerMovement = FindAnyObjectByType<PlayerMovement>();
+        _particleSystem = GetComponent<ParticleSystem>();
         Destroy(gameObject, LifeTime);
     }
 
     void Update()
     {
-        
+        while (TimeManager.IsSkillPaused)
+        {
+            _particleSystem.Pause();
+        }
+        _particleSystem.Play();
     }
 
     private void OnTriggerStay2D(Collider2D collision)

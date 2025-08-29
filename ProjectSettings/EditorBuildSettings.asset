@@ -30,6 +30,15 @@ EditorBuildSettings:
     path: Assets/Scenes/Stage1Inanse.unity
     guid: 7791cc93d8d6b2746aafebed021efce5
   - enabled: 1
+    path: Assets/Scenes/Stage2normal.unity
+    guid: 993c003aa12fd304c8bdb146e08f572b
+  - enabled: 1
+    path: Assets/Scenes/Stage2hard.unity
+    guid: c6d2460c262709049ad8e4bdb1bc57e3
+  - enabled: 1
+    path: Assets/Scenes/Stage2Inanse.unity
+    guid: b6b34c6cc90d1cf4eacb4c2a61c62a4b
+  - enabled: 1
     path: Assets/Scenes/GameOverScene.unity
     guid: 3773cee0d7dad364aac14829c43b7f32
   - enabled: 1

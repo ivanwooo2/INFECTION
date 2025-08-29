@@ -9,7 +9,6 @@ public class LockProjectile : MonoBehaviour
     private PlayerHealth playerHealth;
     private PlayerMovement playerMovement;
     [SerializeField] private int damage;
-    [SerializeField] private float lifetime;
     public AudioSource bow1;
     public AudioClip sfx1;
 
@@ -20,7 +19,6 @@ public class LockProjectile : MonoBehaviour
     }
     public void Initialize(Vector3 dir, GameObject playerObj, GameObject playerObj2)
     {
-        Destroy(gameObject, lifetime);
         direction = dir;
         playerHealth = playerObj.GetComponent<PlayerHealth>();
         playerMovement = playerObj.GetComponent<PlayerMovement>();
@@ -40,6 +38,15 @@ public class LockProjectile : MonoBehaviour
 
     void Update()
     {
+        if (TimeManager.IsSkillPaused)
+        {
+            return;
+        }
         transform.position += direction * speed * Time.deltaTime;
+    }
+
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
     }
 }

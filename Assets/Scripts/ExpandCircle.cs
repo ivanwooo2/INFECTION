@@ -44,6 +44,10 @@ public class ExpandCircle : MonoBehaviour
 
         while (timer < expandDuration)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             float progress = timer / expandDuration;
             innerCircle.localScale = Vector3.Lerp(initialScale, finalScale, progress);
             timer += Time.deltaTime;

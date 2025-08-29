@@ -99,15 +99,5 @@ public class MainMenuController : MonoBehaviour
         {
             PlayButton();
         }
-        if (Input.GetKeyDown(KeyCode.T) && !isTutorialSwitcherOpen)
-        {
-            Panel.SetActive(true);
-            isTutorialSwitcherOpen = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.T) && isTutorialSwitcherOpen)
-        {
-            Panel.SetActive(false);
-            isTutorialSwitcherOpen = false;
-        }
     }
 }

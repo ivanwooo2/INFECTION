@@ -26,6 +26,8 @@ public class LockOnLaserTutorial : MonoBehaviour
     private Vector3 LastPlayerposition;
     public bool IsComplete { get; private set; }
 
+    public bool canFire = true;
+
     public void Initialize(Transform[] points)
     {
         spawnPoints = points;
@@ -97,6 +99,8 @@ public class LockOnLaserTutorial : MonoBehaviour
             timer += Time.deltaTime;
             yield return null;
         }
+
+        yield return new WaitUntil(() => canFire == true);
 
         yield return new WaitForSeconds(attackDelay);
         FireProjectiles();

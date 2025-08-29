@@ -47,6 +47,9 @@ public class PlayerMovementTutorial : MonoBehaviour
     public AudioSource Player;
     public AudioClip dash, skill1, skill2;
 
+    private float moveDistance = 3f;
+    private Vector2 spawnPosition;
+
     public bool isInvincible = false;
     public bool canMove = false;
     public bool Moved = false;
@@ -62,6 +65,7 @@ public class PlayerMovementTutorial : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         activeMoveSpeed = playermoveSpeed;
         BossManagerTutorial = FindObjectOfType<BossManagerTutorial>();
+        spawnPosition = transform.position;
     }
 
     void Update()
@@ -84,6 +88,11 @@ public class PlayerMovementTutorial : MonoBehaviour
 
             playerRB.velocity = playerPosition * activeMoveSpeed;
             if (Input.GetButtonDown("Horizontal") || Input.GetButtonDown("Vertical"))
+            {
+                Moved = true;
+            }
+
+            if (Vector2.Distance(spawnPosition, transform.position) >= moveDistance)
             {
                 Moved = true;
             }

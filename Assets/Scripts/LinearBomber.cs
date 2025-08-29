@@ -58,19 +58,22 @@ public class LinearBomber : MonoBehaviour
         GetComponent<SpriteRenderer>().enabled = false;
 
         StartCoroutine(MultiPhaseExplosion());
-
-        Destroy(gameObject, 2.2f);
     }
 
     IEnumerator MultiPhaseExplosion()
     {
         for (int phase = 0; phase < attackPhases; phase++)
         {
+            while (TimeManager.IsSkillPaused)
+            {
+                yield return null;
+            }
             kuna.clip = sfx1;
             kuna.Play();
             SpawnPhaseFragments(phase);
             yield return new WaitForSeconds(phaseInterval);
         }
+        Destroy(gameObject);
     }
 
     void SpawnPhaseFragments(int phaseIndex)
@@ -115,12 +118,6 @@ public class LinearBomber : MonoBehaviour
         Debug.DrawLine(spawnPosition,
             spawnPosition + moveDirection * moveDistance,
             Color.red, 2f);
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 
 

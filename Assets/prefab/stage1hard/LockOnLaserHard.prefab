@@ -157,3 +157,4 @@ MonoBehaviour:
   smoothness: 5
   laserExtension: 10
   laserMaterial: {fileID: 2100000, guid: e49537fa92c996840b6c573691fdd7b1, type: 2}
+  PauselaserMaterial: {fileID: 2100000, guid: 4593a143bdd93524384bb40120f8a403, type: 2}

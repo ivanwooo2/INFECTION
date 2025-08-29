@@ -36,6 +36,10 @@ public class SnipedBullet : MonoBehaviour
 
     void Update()
     {
+        if (TimeManager.IsSkillPaused)
+        {
+            return;
+        }
         transform.position += direction * Speed * Time.deltaTime;
     }
 }

@@ -101,6 +101,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 18
   lifetime: 6
+  sprites:
+  - {fileID: 21300000, guid: 3bb436f0132c7ce429e897a2ac61c0e5, type: 3}
   rotation: {x: 0, y: 0, z: 150}
 --- !u!50 &5687037682830436944
 Rigidbody2D:

@@ -37,7 +37,7 @@ public class MainGameSceneManage : MonoBehaviour
                 Time.timeScale = 0;
                 Cursor.lockState = CursorLockMode.None;
             }
-            else if (Input.GetKeyDown(KeyCode.Escape) && isPausing || Input.GetButtonDown("Pause") && !isPausing)
+            else if (Input.GetKeyDown(KeyCode.Escape) && isPausing || Input.GetButtonDown("Pause") && isPausing)
             {
                 BGMsource.Play();
                 SEsource.Play();

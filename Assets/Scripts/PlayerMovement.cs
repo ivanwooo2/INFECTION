@@ -12,8 +12,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float playerSkillmoveSpeed;
     [SerializeField] private float originalMoveSpeed;
     [SerializeField] private Rigidbody2D playerRB;
-    [SerializeField] private Sprite origin;
-    [SerializeField] private Sprite Skill;
+    [SerializeField] private Sprite origin1, origin2;
+    [SerializeField] private Sprite Skill1, Skill2;
+    [SerializeField] private Sprite PlayerSkin1, PlayerSkin2;
     private Vector2 playerPosition;
 
     [SerializeField] private float activeMoveSpeed;
@@ -32,22 +33,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject SkillusingImage;
     [SerializeField] private GameObject SkillCooldownBG;
 
+    [SerializeField] private float skill2FreezeDuration = 6f;
+    [SerializeField] private float skill2Cooldown = 16f;
     private float skillCooldownRemaining;
 
-    [SerializeField] private float skillDuration = 5f;
-    [SerializeField] private float skillCooldown = 10f;
+    [SerializeField] private float skill1Duration = 5f;
+    [SerializeField] private float skill1Cooldown = 10f;
     [SerializeField] private float scaleMultiplier = 0.5f;
-    private bool isSkillReady = true;
+    private bool isSkill1Ready = true;
+    private bool isSkill2Ready = true;
     public bool isSkilling;
     private PlayerHealth playerHealth;
     private BossController bossController;
+    private Stage2BossController stage2BossController;
 
     [SerializeField] private TrailRenderer playerTR;
 
     public AudioSource Player;
-    public AudioClip dash,skill1,skill2;
+    public AudioClip dash, skill1, skill2;
 
     public bool isInvincible = false;
+    public int PlayerIndex;
 
     void Start()
     {
@@ -56,6 +62,16 @@ public class PlayerMovement : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         activeMoveSpeed = playermoveSpeed;
         bossController = FindObjectOfType<BossController>();
+        stage2BossController = FindObjectOfType<Stage2BossController>();
+        PlayerIndex = PlayerPrefs.GetInt("SelectedCharacterIndex");
+        if (PlayerIndex == 0)
+        {
+            spriteRenderer.sprite = PlayerSkin1;
+        }
+        else if (PlayerIndex == 1)
+        {
+            spriteRenderer.sprite = PlayerSkin2;
+        }
     }
 
     void Update()
@@ -82,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
                 playerRB.velocity = Vector2.zero;
                 return;
             }
-            if (dashCooldownTime <= 0 && dashLengthCounter <=0 )
+            if (dashCooldownTime <= 0 && dashLengthCounter <= 0)
             {
                 Player.clip = dash;
                 Player.Play();
@@ -129,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (dashLengthCounter <= 0)
             {
-                spriteRenderer.color = new Color(1, 1, 1, 1);;
+                spriteRenderer.color = new Color(1, 1, 1, 1); ;
                 dashCooldownTime = dashCooldown;
                 if (playerTR != null)
                 {
@@ -152,16 +168,34 @@ public class PlayerMovement : MonoBehaviour
             dashCooldownTime -= Time.deltaTime;
         }
 
-        if (Input.GetKeyDown(KeyCode.Q) && isSkillReady || Input.GetButtonDown("Skill") && isSkillReady)
+        if (Input.GetKeyDown(KeyCode.Q) && isSkill1Ready || Input.GetButtonDown("Skill") && isSkill1Ready)
         {
             if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
             {
                 playerRB.velocity = Vector2.zero;
                 return;
             }
-            Player.clip = skill1;
-            Player.Play();
-            StartCoroutine(ActivateSkill());
+            if (PlayerIndex == 0)
+            {
+                Player.clip = skill1;
+                Player.Play();
+                StartCoroutine(ActivateSkill1());
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && isSkill2Ready || Input.GetButtonDown("Skill") && isSkill2Ready)
+        {
+            if (TimeManager.Instance != null && TimeManager.Instance.isGameOver)
+            {
+                playerRB.velocity = Vector2.zero;
+                return;
+            }
+            if (PlayerIndex == 1)
+            {
+                Player.clip = skill1;
+                Player.Play();
+                StartCoroutine(ActivateSkill2());
+            }
         }
     }
 
@@ -181,7 +215,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (skillCooldownImage != null)
         {
-            float skillFill = Mathf.Clamp01(1 - (skillCooldownRemaining / skillCooldown));
+            float skillFill = Mathf.Clamp01(1 - (skillCooldownRemaining / skill1Cooldown));
             skillCooldownImage.fillAmount = skillFill;
 
             if (skillCooldownText != null)
@@ -192,35 +226,55 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    IEnumerator ActivateSkill()
+    IEnumerator ActivateSkill1()
     {
-        isSkillReady = false;
+        isSkill1Ready = false;
         isSkilling = true;
         playerHealth.ToggleSkill(true, scaleMultiplier);
-        spriteRenderer.sprite = Skill;
+        spriteRenderer.sprite = Skill1;
         activeMoveSpeed = playerSkillmoveSpeed;
         SkillusingImage.SetActive(true);
         SkillCooldownBG.SetActive(false);
         if (bossController != null)
         {
-            bossController.ChrSkill1(skillDuration);
+            bossController.ChrSkill1(skill1Duration);
         }
-        yield return new WaitForSeconds(skillDuration);
+        else if (stage2BossController != null)
+        {
+            stage2BossController.ChrSkill1(skill1Duration);
+        }
+        yield return new WaitForSeconds(skill1Duration);
         SkillusingImage.SetActive(false);
         SkillCooldownBG.SetActive(true);
         Player.clip = skill2;
         Player.Play();
         isSkilling = false;
-        spriteRenderer.sprite = origin;
+        spriteRenderer.sprite = origin1;
         activeMoveSpeed = originalMoveSpeed;
         playerHealth.ToggleSkill(false);
-        skillCooldownRemaining = skillCooldown;
+        skillCooldownRemaining = skill1Cooldown;
         while (skillCooldownRemaining > 0)
         {
             skillCooldownRemaining -= Time.deltaTime;
             yield return null;
         }
-        isSkillReady = true;
+        isSkill1Ready = true;
         skillCooldownRemaining = 0;
+    }
+
+    IEnumerator ActivateSkill2()
+    {
+        isSkill2Ready = false;
+        isSkilling = true;
+        TimeManager.TriggerSkillPause(skill2FreezeDuration);
+        yield return new WaitForSeconds(skill2FreezeDuration);
+        skillCooldownRemaining = skill2Cooldown;
+        while (skillCooldownRemaining > 0)
+        {
+            skillCooldownRemaining -= Time.deltaTime;
+            yield return null;
+        }
+        isSkill2Ready = true;
+        isSkilling = false;
     }
 }
